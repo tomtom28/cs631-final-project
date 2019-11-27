@@ -1,0 +1,7 @@
+Need to add SQL queries for...
+
+schema.sql
+
+constraints/triggers/views
+
+seed.sql (seed file)
