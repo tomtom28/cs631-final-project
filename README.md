@@ -11,3 +11,5 @@ http://localhost:8080/
 
 Notes:
 https://spring.io/guides/gs/serving-web-content/
+
+https://www.javaguides.net/2019/01/standard-project-structure-for-spring-boot-projects.html
