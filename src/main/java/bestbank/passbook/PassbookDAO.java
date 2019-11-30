@@ -90,8 +90,7 @@ public class PassbookDAO {
         }
         return transactions;
     }
-
-
+    
     public void close() {
         try {
             conn.close();
