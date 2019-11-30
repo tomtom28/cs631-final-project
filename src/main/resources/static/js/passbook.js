@@ -1,13 +1,10 @@
 $(document).ready(function() {
 
-  console.log('passbok page');
-
   // Click Listener
-  // $('#searchByAccountNoBtn').on("click", function(){
-  //   var accountNo = $("#accountNo")[0].value();
-  //   console.log(accountNo);
-  //   return false;
-  // });
-
+  $('.select-account').on("click", function(){
+    var accountNo = $(this).data('account');
+    // Redirect to new page
+    window.location = '/passbooks/account/' + accountNo;
+  });
 
 });

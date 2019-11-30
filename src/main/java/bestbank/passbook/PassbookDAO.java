@@ -2,10 +2,7 @@ package bestbank.passbook;
 
 import bestbank.application.ApplicationDAO;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class PassbookDAO {
@@ -25,6 +22,48 @@ public class PassbookDAO {
             System.out.println(e);
             return false;
         }
+    }
+
+    public boolean isValidCustomerName(String firstName, String lastName) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM customer WHERE first_name = ?  AND last_name = ?");
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+            ResultSet custNameSet = stmt.executeQuery();
+            return custNameSet.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public ArrayList<String[]> getCustomerAccounts(String firstName, String lastName) {
+        // Create List of Accounts for the given name
+        ArrayList<String[]> listOfAccounts = new ArrayList<>(0);
+        try {
+            String query = "SELECT c.last_name, c.first_name, c.ssn, a.account_no " +
+                "FROM customer c, has_account a " +
+                "WHERE first_name = ? AND last_name = ? " +
+                "AND c.ssn=a.ssn";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+            ResultSet custAccountSet = stmt.executeQuery();
+
+            while (custAccountSet.next()) {
+                String[] account = {
+                    custAccountSet.getString("last_name"),
+                    custAccountSet.getString("first_name"),
+                    custAccountSet.getString("ssn"),
+                    custAccountSet.getString("account_no")
+                };
+                listOfAccounts.add(account);
+            }
+            return listOfAccounts;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return listOfAccounts;
     }
 
     public ArrayList<String[]> getTransactions(String accountNo) {
@@ -49,7 +88,6 @@ public class PassbookDAO {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
         return transactions;
     }
 
