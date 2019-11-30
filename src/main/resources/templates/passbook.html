@@ -103,8 +103,8 @@
                         </div>
 
 
-                        <!-- Display Transactions -->
-                        <table class="table">
+                        <!-- Display Transactions (only if Account No is returned) -->
+                        <table th:each="account : ${account}" class="table">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Date</th>
@@ -116,16 +116,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Balance Forward -->
-                                <!--<tr th:each="balance: ${balance}">-->
-                                    <!--<td><span th:text="${balance[0]}"></span></td>-->
-                                    <!--<td><span th:text="${balance[1]}"></span></td>-->
-                                    <!--<td><span th:text="${balance[2]}"></span></td>-->
-                                    <!--<td><span th:text="${balance[3]}"></span></td>-->
-                                    <!--<td><span th:text="${balance[4]}"></span></td>-->
-                                    <!--<td>$<span th:text="${balance[5]}"></span></td>-->
-                                <!--</tr>-->
-
                                 <!-- Iterate Over Transactions -->
                                 <tr th:each="transaction: ${transactions}">
                                     <td><span th:text="${transaction[0]}"></span></td>
@@ -135,7 +125,6 @@
                                     <td><span th:text="${transaction[4]}"></span></td>
                                     <td>$<span th:text="${transaction[5]}"></span></td>
                                 </tr>
-
                             </tbody>
                         </table>
 

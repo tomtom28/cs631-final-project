@@ -31,12 +31,9 @@ public class PassbookController {
             model.addAttribute("account", accountNo);
             // Create Passbook
             Passbook passbook = new Passbook(accountNo);
-//            passbook.setBalanceFwd(passbookDAO.getBalanceFwd(accountNo));
             passbook.setTransactions(passbookDAO.getTransactions(accountNo));
             passbook.processTransactions();
-
             // Send to Template
-//            model.addAttribute("balance", new String[][] {passbook.getBalanceFwd()});
             model.addAttribute("transactions", passbook.getProcessedTransactions());
         } else {
             model.addAttribute("error", "Account No: \"" + accountNo + "\" was not found! Please try another 9-digit account number.");

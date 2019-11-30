@@ -27,26 +27,6 @@ public class PassbookDAO {
         }
     }
 
-//    public String[] getBalanceFwd(String accountNo) {
-//        String[] balanceFwd = new String[6];
-//        try {
-//            Statement stmt = conn.createStatement();
-//            ResultSet balanceSet = stmt.executeQuery("SELECT CURDATE() AS balance_date, balance FROM account WHERE account_no = " + accountNo);
-//            // Get Current Balance
-//            while (balanceSet.next()) {
-//                balanceFwd[0] = balanceSet.getString("balance_date");
-//                balanceFwd[1] = "";
-//                balanceFwd[2] = "";
-//                balanceFwd[3] = "";
-//                balanceFwd[4] = "";
-//                balanceFwd[5] = balanceSet.getString("balance");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
-//        return balanceFwd;
-//    }
-
     public ArrayList<String[]> getTransactions(String accountNo) {
         ArrayList<String[]> transactions = new ArrayList<>(0);
         try {
