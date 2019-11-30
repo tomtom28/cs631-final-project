@@ -3,9 +3,11 @@ $(document).ready(function() {
   console.log('passbok page');
 
   // Click Listener
-  $('#submit').on("click", function(){
-    console.log('submitted');
-  });
+  // $('#searchByAccountNoBtn').on("click", function(){
+  //   var accountNo = $("#accountNo")[0].value();
+  //   console.log(accountNo);
+  //   return false;
+  // });
 
 
 });
