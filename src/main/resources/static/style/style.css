@@ -7,3 +7,22 @@
     margin-top: 10vh;
 }
 
+main {
+    margin-top: 5vh;
+}
+
+/*Passbook*/
+.searchByName {
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+.searchByAccountNo {
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+h3.passbook {
+    margin-top: 20px;
+}
+.alert-danger {
+    margin-top: 20px;
+}

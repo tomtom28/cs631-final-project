@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class ApplicationDAO {
 
     // Database Credentials
-    private static String userName = "";
-    private static String password = "";
-    private static String dataBaseURL = "";
+    private static String userName = "root";
+    private static String password = "root";
+    private static String dataBaseURL = "jdbc:mysql://localhost:3306/bestbank_db";
 
     // Gets DB Connection Instance
     public static Connection getDBConnection() {

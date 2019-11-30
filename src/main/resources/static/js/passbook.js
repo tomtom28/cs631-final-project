@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
-  console.log('passbok page');
-
   // Click Listener
-  $('#submit').on("click", function(){
-    console.log('submitted');
+  $('.select-account').on("click", function(){
+    var accountNo = $(this).data('account');
+    // Redirect to new page
+    window.location = '/passbooks/account/' + accountNo;
   });
-
 
 });
