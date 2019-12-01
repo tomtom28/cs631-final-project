@@ -62,7 +62,8 @@ ALTER TABLE account AUTO_INCREMENT = 100000000; -- account
 alter TABLE customer change `name` first_name VARCHAR(80); -- customer
 alter TABLE customer add column last_name VARCHAR(80) after first_name; -- customer
 alter TABLE customer change ssn ssn VARCHAR(11); -- customer
-
+alter TABLE customer change `apt#` apt_no VARCHAR(80); -- customer
+alter TABLE customer change `street#` street_no VARCHAR(80); -- customer
 
 -- ***************************************
 
@@ -75,7 +76,10 @@ INSERT INTO account(balance,last_accessed,overdraft,intrest_rate)
 VALUES (4398.00, '2019-11-30', 0, 0),
 (580.91, '2019-10-30', 0, 0),
 (888.0, '2019-11-11', 0, 0);
-
+INSERT INTO branch(name, city, assets)
+VALUES ('Branch A', 'Newark', 100000),
+('Branch B', 'New York', 100000),
+('Branch C', 'Jersey City', 100000);
 
 -- ***************************************
 

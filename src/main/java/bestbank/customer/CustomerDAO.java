@@ -80,11 +80,11 @@ public class CustomerDAO {
     public String addNewAccount(String ssn, String branchName, String accountType, String interest, String balance) throws SQLException {
 
         // Insert New Account
-        // TODO
+        // TODO - insert new record to DB (assumes that Account No is auto increment)
 
         // Get Latest (i.e. biggest #) Account No
         String newAccountNo = "99999999";
-        // TODO
+        // TODO - query largest Account No for the given ssn
 
         return newAccountNo;
     }
