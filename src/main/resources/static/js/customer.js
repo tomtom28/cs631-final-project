@@ -1,14 +1,15 @@
 $(document).ready(function() {
 
-  console.log('customer page');
-
-  // Set Tab Active
-
-
-  // Click Listener
-  $('#submit').on("click", function(){
-    console.log('submitted');
+  // Unhide Savings Rate
+  $('#radio-btn-savings').on("click", function(){
+    $("#addCustomerSavingsInterest").val("2.0");
+    $("#interest-rate-box").removeClass("hidden");
   });
 
+  // Hide Savings Rate
+  $('#radio-btn-checking').on("click", function(){
+    $("#addCustomerSavingsInterest").val("");
+    $("#interest-rate-box").addClass("hidden");
+  });
 
 });
