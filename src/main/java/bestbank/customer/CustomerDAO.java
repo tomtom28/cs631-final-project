@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CustomerDAO {
 
@@ -31,6 +32,23 @@ public class CustomerDAO {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM customer WHERE ssn = ?");
         stmt.setString(1, ssn);
         stmt.execute();
+    }
+
+    public ArrayList<String> getAllBankBranches() {
+        ArrayList<String> allBranches = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT name FROM branch");
+            ResultSet branchSet = stmt.executeQuery();
+            // Iterate over branches
+            while (branchSet.next()) {
+                allBranches.add(branchSet.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            return allBranches;
+        }
+        return allBranches;
     }
 
 

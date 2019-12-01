@@ -47,16 +47,40 @@
                                 </div>
                                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/customers/add/customer}" method="POST" class="customerInputField">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input name="firstName" type="text" class="form-control" id="firstName">
+                                                <label for="addCustomerFirstName">First Name</label>
+                                                <input name="firstName" type="text" class="form-control" id="addCustomerFirstName" placeholder="Joel">
                                             </div>
                                             <div class="form-group">
-                                                <label for="lastName">Last Name</label>
-                                                <input name="lastName" type="text" class="form-control" id="lastName">
+                                                <label for="addCustomerLastName">Last Name</label>
+                                                <input name="lastName" type="text" class="form-control" id="addCustomerLastName" placeholder="Bloom">
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <div class="form-group">
+                                                <label for="addCustomerSSN">SSN</label>
+                                                <input name="ssn" type="text" class="form-control" id="addCustomerSSN" placeholder="xxx-xx-xxxx">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="addCustomerStreet">Street</label>
+                                                <input name="street" type="text" class="form-control" id="addCustomerStreet" placeholder="123 Main Street">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="addCustomerApt">Apartment No.</label>
+                                                <input name="apt" type="text" class="form-control" id="addCustomerApt" placeholder="101B">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="addCustomerCity">City</label>
+                                                <input name="city" type="text" class="form-control" id="addCustomerCity" placeholder="Newark">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="addCustomerState">State</label>
+                                                <input name="state" type="text" class="form-control" id="addCustomerState" placeholder="New Jersey">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="addCustomerZip">ZIP Code</label>
+                                                <input name="zip" type="text" class="form-control" id="addCustomerZip" placeholder="07101">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Add Customer</button>
                                         </form>
                                     </div>
                                 </div>
@@ -76,7 +100,7 @@
                                                 <label for="removeCustomerSSN">Customer SSN (xxx-xx-xxxx)</label>
                                                 <input name="removeCustomerSSN" type="text" class="form-control" id="removeCustomerSSN" placeholder="123-00-5678">
                                             </div>
-                                            <button type="submit" class="btn btn-danger" id="searchByAccountNoBtn">Remove Customer</button>
+                                            <button type="submit" class="btn btn-danger">Remove Customer</button>
                                         </form>
                                     </div>
                                 </div>
@@ -91,16 +115,39 @@
                                 </div>
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/customers/add/account}" method="POST" class="customerInputField">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input name="firstName" type="text" class="form-control" id="firstName">
+                                                <label for="addCustomerAccountSSN">Customer SSN (xxx-xx-xxxx)</label>
+                                                <input name="ssn" type="text" class="form-control" id="addCustomerAccountSSN" placeholder="123-00-5678">
                                             </div>
+
+                                            <!-- Branch Drop Down-->
                                             <div class="form-group">
-                                                <label for="lastName">Last Name</label>
-                                                <input name="lastName" type="text" class="form-control" id="lastName">
+                                                <label for="addCustomerAccountBranch">Branch Name</label>
+                                                <select name="branchName" class="form-control" id="addCustomerAccountBranch">
+                                                    <option th:each="branch : ${branches}" th:value="${branch}" th:text="${branch}"></option>
+                                                </select>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                                            <!-- Account Type-->
+                                            <div class="form-group">
+                                                <label for="addCustomerAccountType">Account Type</label>
+                                                <div id="addCustomerAccountType">
+                                                    <input id="radio-btn-checking" type="radio" name="accountType" value="checking" checked> Checking<br>
+                                                    <input id="radio-btn-savings" type="radio" name="accountType" value="savings"> Savings<br>
+                                                </div>
+                                            </div>
+
+                                            <div id="interest-rate-box" class="form-group hidden">
+                                                <label for="addCustomerSavingsInterest">Interest Rate (%)</label>
+                                                <input name="interest" type="number" min="0.00" step="0.1" class="form-control" id="addCustomerSavingsInterest" placeholder="2.0">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="addCustomerAccountBalance">Initial Balance ($)</label>
+                                                <input name="balance" type="number" min="500.00" step="0.01" class="form-control" id="addCustomerAccountBalance" placeholder="500.00">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Create Account</button>
                                         </form>
                                     </div>
                                 </div>
@@ -115,16 +162,12 @@
                                 </div>
                                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/customers/remove/account}" method="POST" class="customerInputField">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input name="firstName" type="text" class="form-control" id="firstName">
+                                                <label for="removeCustomerAccount">Account No.</label>
+                                                <input name="accountNo" type="text" class="form-control" id="removeCustomerAccount" placeholder="123456789">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="lastName">Last Name</label>
-                                                <input name="lastName" type="text" class="form-control" id="lastName">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-danger">Remove Account</button>
                                         </form>
                                     </div>
                                 </div>
@@ -139,16 +182,25 @@
                                 </div>
                                 <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/customers/add/loan}" method="POST" class="customerInputField">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input name="firstName" type="text" class="form-control" id="firstName">
+                                                <label for="addCustomerAccountSSN">Customer SSN (xxx-xx-xxxx)</label>
+                                                <input name="ssn" type="text" class="form-control" id="addCustomerLoanSSN" placeholder="123-00-5678">
                                             </div>
+
+                                            <!-- Branch Drop Down-->
                                             <div class="form-group">
-                                                <label for="lastName">Last Name</label>
-                                                <input name="lastName" type="text" class="form-control" id="lastName">
+                                                <label for="addCustomerAccountBranch">Branch Name</label>
+                                                <select name="branchName" class="form-control" id="addCustomerLoanBranch">
+                                                    <option th:each="branch : ${branches}" th:value="${branch}" th:text="${branch}"></option>
+                                                </select>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                                            <div class="form-group">
+                                                <label for="addCustomerLoanAmount">Loan Amount ($)</label>
+                                                <input name="amount" type="number" min="500.00" step="0.01" class="form-control" id="addCustomerLoanAmount" placeholder="500.00">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Create Loan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -163,21 +215,16 @@
                                 </div>
                                 <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/customers/remove/loan}" method="POST" class="customerInputField">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input name="firstName" type="text" class="form-control" id="firstName">
+                                                <label for="removeCustomerLoan">Loan No.</label>
+                                                <input name="loanNo" type="text" class="form-control" id="removeCustomerLoan" placeholder="123456789">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="lastName">Last Name</label>
-                                                <input name="lastName" type="text" class="form-control" id="lastName">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-danger">Remove Loan</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-
 
                         </div>
                     </div>

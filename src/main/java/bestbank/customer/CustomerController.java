@@ -14,12 +14,18 @@ public class CustomerController {
 
     @GetMapping("/customers")
     public String view(String name, Model model) {
-        model.addAttribute("name", name);
+
+        // Get current bank branches (for drop down)
+        CustomerDAO customerDAO = new CustomerDAO();
+        ArrayList<String> branches = customerDAO.getAllBankBranches();
+        customerDAO.close();
+
+        model.addAttribute("branches", branches);
         return "customer";
     }
 
     @PostMapping("/customers/remove/customer")
-    public String getPassbooksCustomer(@RequestParam(name="removeCustomerSSN") String customerSSN, Model model) {
+    public String removeCustomer(@RequestParam(name="removeCustomerSSN") String customerSSN, Model model) {
         CustomerDAO customerDAO = new CustomerDAO();
         String actionType = "[Remove an Existing Customer]";
         if (customerDAO.isValidCustomerSSN(customerSSN)) {

@@ -12,7 +12,9 @@ main {
 .alert-success {
     margin-top: 20px;
 }
-
+.hidden {
+    display: none;
+}
 
 /*Home*/
 .jumbotron {
