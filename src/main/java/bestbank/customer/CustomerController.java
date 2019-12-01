@@ -17,16 +17,17 @@ public class CustomerController {
 
         // Get current bank branches (for drop down)
         CustomerDAO customerDAO = new CustomerDAO();
-        ArrayList<String> branches = customerDAO.getAllBankBranches();
+        this.appendAllBranches(model, customerDAO);
         customerDAO.close();
 
-        model.addAttribute("branches", branches);
         return "customer";
     }
 
     @PostMapping("/customers/remove/customer")
     public String removeCustomer(@RequestParam(name="ssn") String customerSSN, Model model) {
         CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
+
         String actionType = "[Remove an Existing Customer]";
         if (customerDAO.isValidCustomerSSN(customerSSN)) {
             // Try to delete from DB
@@ -60,6 +61,8 @@ public class CustomerController {
         // Create Customer & DAO object
         Customer customer = new Customer(firstName, lastName, ssn, street, apt, city, state, zip);
         CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
+
         String actionType = "[Add a New Customer]";
         try {
             customerDAO.addNewCustomer(customer);
@@ -82,6 +85,8 @@ public class CustomerController {
 
         // Create Customer & DAO object
         CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
+
         String actionType = "[Add a New Account]";
         try {
             String accountNo = customerDAO.addNewAccount(ssn, branchName, accountType, interest, balance);
@@ -93,6 +98,13 @@ public class CustomerController {
         }
         customerDAO.close();
         return "customer";
+    }
+
+
+    // Get current bank branches (for drop down)
+    private void appendAllBranches(Model model, CustomerDAO customerDAO) {
+        ArrayList<String> branches = customerDAO.getAllBankBranches();
+        model.addAttribute("branches", branches);
     }
 
 }

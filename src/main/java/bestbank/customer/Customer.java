@@ -30,8 +30,6 @@ public class Customer {
             this.hasAptNo = true;
         }
 
-        int tom = 0;
-
     }
 
     public boolean hasAptNo() {
