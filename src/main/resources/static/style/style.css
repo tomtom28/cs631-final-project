@@ -1,15 +1,24 @@
+/*All Pages*/
+main {
+    margin-top: 5vh;
+}
 .logo {
     width: 30px;
     display: inline;
 }
+.alert-danger {
+    margin-top: 20px;
+}
+.alert-success {
+    margin-top: 20px;
+}
 
+
+/*Home*/
 .jumbotron {
     margin-top: 10vh;
 }
 
-main {
-    margin-top: 5vh;
-}
 
 /*Passbook*/
 .searchByName {
@@ -23,6 +32,10 @@ main {
 h3.passbook {
     margin-top: 20px;
 }
-.alert-danger {
-    margin-top: 20px;
+
+
+/*Customer*/
+.customerInputField {
+    padding-left: 10vw;
+    padding-right: 10vw;
 }
