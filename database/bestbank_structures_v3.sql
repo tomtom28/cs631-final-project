@@ -1,13 +1,13 @@
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: bestbank
+-- Host: 127.0.0.1    Database: bestbank
 -- ------------------------------------------------------
 -- Server version	8.0.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -23,23 +23,14 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `account_Number` varchar(45) NOT NULL,
+  `account_no` varchar(45) NOT NULL,
   `balance` int(11) NOT NULL,
   `last_accessed` date NOT NULL,
   `overdraft` int(11) DEFAULT NULL,
   `intrest_rate` int(11) DEFAULT NULL,
-  PRIMARY KEY (`account_Number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`account_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `account`
---
-
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `branch`
@@ -53,18 +44,8 @@ CREATE TABLE `branch` (
   `city` varchar(45) NOT NULL,
   `assets` int(11) NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `branch`
---
-
-LOCK TABLES `branch` WRITE;
-/*!40000 ALTER TABLE `branch` DISABLE KEYS */;
-INSERT INTO `branch` VALUES ('Frank\'s Bank','Edison',500000),('Joe\'s Bank','Newark',700000),('John\'s Bank','Trenton',400000);
-/*!40000 ALTER TABLE `branch` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `customer`
@@ -74,26 +55,32 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `ssn` varchar(9) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `address` varchar(45) NOT NULL,
-  `zip_code` varchar(45) NOT NULL,
+  `ssn` varchar(11) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `apt_no` int(11) DEFAULT NULL,
+  `street_no` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
-  `apt#` int(11) DEFAULT NULL,
-  `street#` varchar(45) NOT NULL,
+  `zip_code` varchar(45) NOT NULL,
   `state` varchar(45) NOT NULL,
   PRIMARY KEY (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer`
+-- Table structure for table `customers banker`
 --
 
-LOCK TABLES `customer` WRITE;
-/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `customers banker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customers banker` (
+  `customer_ssn` varchar(11) NOT NULL,
+  `employee_ssn` varchar(11) NOT NULL,
+  `role` varchar(45) NOT NULL,
+  PRIMARY KEY (`customer_ssn`,`employee_ssn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `dependent`
@@ -103,22 +90,13 @@ DROP TABLE IF EXISTS `dependent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dependent` (
-  `name` varchar(45) NOT NULL,
-  `ssn` varchar(9) NOT NULL,
-  `dependentcol` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`name`),
+  `last_name` varchar(45) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `ssn` varchar(11) NOT NULL,
+  PRIMARY KEY (`last_name`,`first_name`),
   UNIQUE KEY `ssn_UNIQUE` (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dependent`
---
-
-LOCK TABLES `dependent` WRITE;
-/*!40000 ALTER TABLE `dependent` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dependent` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `employee`
@@ -132,21 +110,39 @@ CREATE TABLE `employee` (
   `manager_ssn` varchar(11) NOT NULL,
   `start_date` date NOT NULL,
   `employment_length` varchar(45) NOT NULL,
-  `phone_number` varchar(45) NOT NULL,
+  `phone_no` varchar(45) NOT NULL,
   `branch_name` varchar(45) NOT NULL,
   PRIMARY KEY (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee`
+-- Table structure for table `has_account`
 --
 
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES ('112-98-1507','227-65-3915','2017-02-17','2 Years','846-234-5891','Frank\'s Bank'),('229-64-2379','321-68-9764','2012-01-05','7 Years','202-467-9273','Joe\'s Bank'),('568-25-9875','659-98-7533','2000-08-05','19 Years','732-555-9845','John\'s Bank'),('678-95-1374','227-65-3915','2018-06-07','1 Year','846-234-6671','Frank\'s Bank');
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `has_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `has_account` (
+  `ssn` varchar(11) NOT NULL,
+  `account_no` varchar(11) NOT NULL,
+  PRIMARY KEY (`ssn`,`account_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `has_loan`
+--
+
+DROP TABLE IF EXISTS `has_loan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `has_loan` (
+  `loan_no` int(11) NOT NULL,
+  `ssn` varchar(45) NOT NULL,
+  PRIMARY KEY (`loan_no`,`ssn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `loan`
@@ -156,21 +152,28 @@ DROP TABLE IF EXISTS `loan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `loan` (
-  `loan#` int(11) NOT NULL,
+  `loan_no` int(11) NOT NULL,
   `loan_amnt` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`loan#`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`loan_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loan`
+-- Table structure for table `loan_payment`
 --
 
-LOCK TABLES `loan` WRITE;
-/*!40000 ALTER TABLE `loan` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loan` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `loan_payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `loan_payment` (
+  `payment_no` varchar(11) NOT NULL,
+  `loan_no` varchar(11) NOT NULL,
+  `amount` varchar(45) NOT NULL,
+  `payment_date` varchar(45) NOT NULL,
+  PRIMARY KEY (`payment_no`,`loan_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `transaction`
@@ -182,19 +185,10 @@ DROP TABLE IF EXISTS `transaction`;
 CREATE TABLE `transaction` (
   `transaction_code` varchar(2) NOT NULL,
   `transaction_type` varchar(45) NOT NULL,
-  `account_number` int(11) NOT NULL,
+  `account_no` int(11) NOT NULL,
   PRIMARY KEY (`transaction_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `transaction`
---
-
-LOCK TABLES `transaction` WRITE;
-/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -205,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-30  2:48:25
+-- Dump completed on 2019-12-01  3:42:39
