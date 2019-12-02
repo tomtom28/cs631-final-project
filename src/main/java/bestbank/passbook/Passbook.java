@@ -1,14 +1,13 @@
 package bestbank.passbook;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Passbook {
 
     private String accountNo;
     private ArrayList<String[]> transactions;
     private String[] balanceFwd;
-    private ArrayList<String[]> cleanTransactions;
+    private ArrayList<String[]> processedTransactions;
 
     public Passbook(String accountNo) {
         this.accountNo = accountNo;
@@ -17,7 +16,7 @@ public class Passbook {
     public void processTransactions() {
 
         double currentBalance = 0.0;
-        cleanTransactions = new ArrayList<>(0);
+        processedTransactions = new ArrayList<>(0);
         for(int i=0; i < transactions.size(); i++) {
             String[] transaction = transactions.get(i);
             String[] cleanTransaction = new String[6];
@@ -39,7 +38,7 @@ public class Passbook {
             cleanTransaction[5] = Double.toString(currentBalance);
 
             // Append
-            cleanTransactions.add(cleanTransaction);
+            processedTransactions.add(cleanTransaction);
         }
     }
 
@@ -64,6 +63,6 @@ public class Passbook {
     }
 
     public ArrayList<String[]> getProcessedTransactions() {
-        return this.cleanTransactions;
+        return this.processedTransactions;
     }
 }

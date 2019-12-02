@@ -102,7 +102,7 @@
 
                         <!-- Display All Customer Loans -->
                         <div th:each="loan : ${has_loan}">
-                            <h3 class="passbook">Please click on an Account No:</span></h3>
+                            <h3 class="loans">Please click on a Loan No:</span></h3>
                         </div>
                         <table th:each="loan : ${has_loan}" class="table">
                             <thead class="thead-dark">
@@ -114,22 +114,20 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Iterate Over Customers Accounts -->
+                            <!-- Iterate Over Customers Loans -->
                             <tr th:each="loan : ${loans}">
                                 <td><span th:text="${loan[0]}"></span></td>
                                 <td><span th:text="${loan[1]}"></span></td>
                                 <td><span th:text="${loan[2]}"></span></td>
-                                <td><a class="select-loan" href="#" th:text="${loan[3]}" th:data-account="${loan[3]}"></a></td>
+                                <td><a class="select-loan" href="#" th:text="${loan[3]}" th:data-loan="${loan[3]}"></a></td>
                             </tr>
                             </tbody>
                         </table>
 
 
-
-
                         <!-- Display Loan No -->
                         <div th:each="loan : ${loan}">
-                            <h3 class="loan">Payment History for Loan No:  <span th:text="${loan}"></span></h3>
+                            <h3 class="loans">Payment History for Loan No:  <span th:text="${loan}"></span></h3>
                         </div>
 
                         <!-- Display Transactions (only if Loan No is returned) -->
@@ -146,17 +144,17 @@
 
                             <!--Show Loan Principal-->
                             <tr>
-                                <td><span th:text="${loan[0]}"></span></td>
-                                <td><span th:text="${loan[1]}"></span></td>
-                                <td><span th:text="${loan[2]}"></span></td>
-                                <td>$<span th:text="${loan[3]}"></span></td>
+                                <td><span th:text="${loanDate}"></span></td>
+                                <td><span>Loan Principal</span></td>
+                                <td><span></span></td>
+                                <td>$<span th:text="${loanPrincipal}"></span></td>
                             </tr>
                             <!-- Iterate Over Payments -->
                             <tr th:each="payment: ${payments}">
                                 <td><span th:text="${payment[0]}"></span></td>
                                 <td><span>Payment</span></td>
-                                <td><span th:text="${payment[2]}"></span></td>
-                                <td>$<span th:text="${payment[3]}"></span></td>
+                                <td><span th:text="${payment[1]}"></span></td>
+                                <td>$<span th:text="${payment[2]}"></span></td>
                             </tr>
                             </tbody>
                         </table>
