@@ -101,6 +101,19 @@ public class CustomerController {
     }
 
 
+    // TODO: ADD PostMapping: /customers/add/account
+
+
+    // TODO: ADD PostMapping: /customers/remove/account
+
+
+    // TODO: ADD PostMapping: /customers/add/loan
+
+
+    // TODO: ADD PostMapping: /customers/remove/loan
+
+
+
     // Get current bank branches (for drop down)
     private void appendAllBranches(Model model, CustomerDAO customerDAO) {
         ArrayList<String> branches = customerDAO.getAllBankBranches();
