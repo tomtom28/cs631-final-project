@@ -23,13 +23,12 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `account_no` varchar(45) NOT NULL,
-  `balance` int(11) NOT NULL,
+  `account_no` int(11) NOT NULL AUTO_INCREMENT,
+  `balance` double NOT NULL,
   `last_accessed` date NOT NULL,
-  `overdraft` int(11) DEFAULT NULL,
-  `intrest_rate` int(11) DEFAULT NULL,
+  `branch_name` varchar(45) NOT NULL,
   PRIMARY KEY (`account_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100000004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,9 +41,23 @@ DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch` (
   `name` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
-  `assets` int(11) NOT NULL,
+  `assets` double NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `checking_account`
+--
+
+DROP TABLE IF EXISTS `checking_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `checking_account` (
+  `account_no` int(11) NOT NULL AUTO_INCREMENT,
+  `overdraft` double NOT NULL,
+  PRIMARY KEY (`account_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=100000003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +77,7 @@ CREATE TABLE `customer` (
   `zip_code` varchar(45) NOT NULL,
   `state` varchar(45) NOT NULL,
   PRIMARY KEY (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +92,7 @@ CREATE TABLE `customers banker` (
   `employee_ssn` varchar(11) NOT NULL,
   `role` varchar(45) NOT NULL,
   PRIMARY KEY (`customer_ssn`,`employee_ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +108,7 @@ CREATE TABLE `dependent` (
   `ssn` varchar(11) NOT NULL,
   PRIMARY KEY (`last_name`,`first_name`),
   UNIQUE KEY `ssn_UNIQUE` (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,11 +122,12 @@ CREATE TABLE `employee` (
   `ssn` varchar(11) NOT NULL,
   `manager_ssn` varchar(11) NOT NULL,
   `start_date` date NOT NULL,
-  `employment_length` varchar(45) NOT NULL,
+  `employment_length` int(11) NOT NULL,
   `phone_no` varchar(45) NOT NULL,
   `branch_name` varchar(45) NOT NULL,
+  `position` varchar(45) NOT NULL,
   PRIMARY KEY (`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,10 +138,10 @@ DROP TABLE IF EXISTS `has_account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `has_account` (
-  `ssn` varchar(11) NOT NULL,
   `account_no` varchar(11) NOT NULL,
-  PRIMARY KEY (`ssn`,`account_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ssn` varchar(11) NOT NULL,
+  PRIMARY KEY (`account_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +155,7 @@ CREATE TABLE `has_loan` (
   `loan_no` int(11) NOT NULL,
   `ssn` varchar(45) NOT NULL,
   PRIMARY KEY (`loan_no`,`ssn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,11 +166,12 @@ DROP TABLE IF EXISTS `loan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `loan` (
-  `loan_no` int(11) NOT NULL,
+  `loan_no` int(11) NOT NULL AUTO_INCREMENT,
   `loan_amnt` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
+  `date_taken` date NOT NULL,
   PRIMARY KEY (`loan_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=345783652 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,12 +182,26 @@ DROP TABLE IF EXISTS `loan_payment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `loan_payment` (
-  `payment_no` varchar(11) NOT NULL,
+  `payment_no` int(11) NOT NULL AUTO_INCREMENT,
   `loan_no` varchar(11) NOT NULL,
-  `amount` varchar(45) NOT NULL,
-  `payment_date` varchar(45) NOT NULL,
+  `amount` double NOT NULL,
+  `payment_date` date NOT NULL,
   PRIMARY KEY (`payment_no`,`loan_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100000002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `saving_account`
+--
+
+DROP TABLE IF EXISTS `saving_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `saving_account` (
+  `account_no` int(11) NOT NULL AUTO_INCREMENT,
+  `intrest_rate` double NOT NULL,
+  PRIMARY KEY (`account_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=100000004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,11 +212,29 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction` (
+  `record_no` int(11) NOT NULL AUTO_INCREMENT,
+  `account_no` int(11) NOT NULL,
+  `transaction_code` varchar(2) NOT NULL,
+  `date` date NOT NULL,
+  `transaction_time` varchar(45) NOT NULL,
+  `amount` double NOT NULL,
+  PRIMARY KEY (`record_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=100000007 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `transaction_type`
+--
+
+DROP TABLE IF EXISTS `transaction_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transaction_type` (
   `transaction_code` varchar(2) NOT NULL,
   `transaction_type` varchar(45) NOT NULL,
-  `account_no` int(11) NOT NULL,
+  `charge` double NOT NULL,
   PRIMARY KEY (`transaction_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -199,4 +246,4 @@ CREATE TABLE `transaction` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-01  3:42:39
+-- Dump completed on 2019-12-01 23:11:01
