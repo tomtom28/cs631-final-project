@@ -22,13 +22,14 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" th:href="@{/transactions}">Transactions</a>
-                    <a class="nav-item nav-link active" th:href="@{/passbooks}">Passbooks</a>
-                    <a class="nav-item nav-link" th:href="@{/loans}">Loans</a>
+                    <a class="nav-item nav-link" th:href="@{/passbooks}">Passbooks</a>
+                    <a class="nav-item nav-link active" th:href="@{/loans}">Loans</a>
                     <a class="nav-item nav-link" th:href="@{/customers}">Customer Service</a>
                 </div>
             </div>
         </nav>
 
+        <!--Content-->
         <!--Content-->
         <div class="container-fluid">
             <main>
@@ -36,24 +37,24 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-10">
-                        <h1 class="">View Passbooks</h1>
+                        <h1 class="">View Loans</h1>
                         <div class="accordion" id="accordion">
                             <div class="card">
                                 <div class="card-header" id="headingOne">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Search By Account No.
+                                            Search By Loan No.
                                         </button>
                                     </h2>
                                 </div>
                                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/account}" method="POST" class="searchByAccountNo">
+                                        <form th:action="@{/loans/payments}" method="POST" class="loanInputField">
                                             <div class="form-group">
-                                                <label for="accountNo">Account No.</label>
-                                                <input name="accountNo" type="text" class="form-control" id="accountNo">
+                                                <label for="loanNo">Loan No.</label>
+                                                <input name="loanNo" type="text" class="form-control" id="loanNo">
                                             </div>
-                                            <button type="submit" class="btn btn-primary" id="searchByAccountNoBtn">Submit</button>
+                                            <button type="submit" class="btn btn-primary" id="searchByLoanNoBtn">Submit</button>
                                         </form>
                                     </div>
                                 </div>
@@ -68,7 +69,7 @@
                                 </div>
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                                     <div class="card-body">
-                                        <form th:action="@{/passbooks/customer}" method="POST" class="searchByName">
+                                        <form th:action="@{/loans/customer}" method="POST" class="loanInputField">
                                             <div class="form-group">
                                                 <label for="firstName">First Name</label>
                                                 <input name="firstName" type="text" class="form-control" id="firstName">
@@ -86,7 +87,7 @@
                     </div>
                 </div>
 
-                <!-- View Passbook -->
+                <!-- View Loan History -->
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-10">
@@ -99,26 +100,26 @@
                         </div>
 
 
-                        <!-- Display All Customer Accounts -->
-                        <div th:each="account : ${has_account}">
+                        <!-- Display All Customer Loans -->
+                        <div th:each="loan : ${has_loan}">
                             <h3 class="passbook">Please click on an Account No:</span></h3>
                         </div>
-                        <table th:each="account : ${has_account}" class="table">
+                        <table th:each="loan : ${has_loan}" class="table">
                             <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Last Name</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">SSN</th>
-                                <th scope="col">Account No.</th>
+                                <th scope="col">Loan No.</th>
                             </tr>
                             </thead>
                             <tbody>
                             <!-- Iterate Over Customers Accounts -->
-                            <tr th:each="account : ${accounts}">
-                                <td><span th:text="${account[0]}"></span></td>
-                                <td><span th:text="${account[1]}"></span></td>
-                                <td><span th:text="${account[2]}"></span></td>
-                                <td><a class="select-account" href="#" th:text="${account[3]}" th:data-account="${account[3]}"></a></td>
+                            <tr th:each="loan : ${loans}">
+                                <td><span th:text="${loan[0]}"></span></td>
+                                <td><span th:text="${loan[1]}"></span></td>
+                                <td><span th:text="${loan[2]}"></span></td>
+                                <td><a class="select-loan" href="#" th:text="${loan[3]}" th:data-account="${loan[3]}"></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -126,40 +127,44 @@
 
 
 
-                        <!-- Display Account No -->
-                        <div th:each="account : ${account}">
-                            <h3 class="passbook">Passbook for Account No:  <span th:text="${account}"></span></h3>
+                        <!-- Display Loan No -->
+                        <div th:each="loan : ${loan}">
+                            <h3 class="loan">Payment History for Loan No:  <span th:text="${loan}"></span></h3>
                         </div>
 
-                        <!-- Display Transactions (only if Account No is returned) -->
-                        <table th:each="account : ${account}" class="table">
+                        <!-- Display Transactions (only if Loan No is returned) -->
+                        <table th:each="loan : ${loan}" class="table">
                             <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Transaction Code</th>
-                                    <th scope="col">Transaction Name</th>
-                                    <th scope="col">Debits</th>
-                                    <th scope="col">Credits</th>
-                                    <th scope="col">Balance</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Transaction Type</th>
+                                <th scope="col">Payment Amount</th>
+                                <th scope="col">Balance</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <!-- Iterate Over Transactions -->
-                                <tr th:each="transaction: ${transactions}">
-                                    <td><span th:text="${transaction[0]}"></span></td>
-                                    <td><span th:text="${transaction[1]}"></span></td>
-                                    <td><span th:text="${transaction[2]}"></span></td>
-                                    <td><span th:text="${transaction[3]}"></span></td>
-                                    <td><span th:text="${transaction[4]}"></span></td>
-                                    <td>$<span th:text="${transaction[5]}"></span></td>
-                                </tr>
+
+                            <!--Show Loan Principal-->
+                            <tr>
+                                <td><span th:text="${loan[0]}"></span></td>
+                                <td><span th:text="${loan[1]}"></span></td>
+                                <td><span th:text="${loan[2]}"></span></td>
+                                <td>$<span th:text="${loan[3]}"></span></td>
+                            </tr>
+                            <!-- Iterate Over Payments -->
+                            <tr th:each="payment: ${payments}">
+                                <td><span th:text="${payment[0]}"></span></td>
+                                <td><span>Payment</span></td>
+                                <td><span th:text="${payment[2]}"></span></td>
+                                <td>$<span th:text="${payment[3]}"></span></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
             </main>
         </div>
+
 
         <!-- JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -168,6 +173,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <!-- Link in JavaScript -->
-        <script th:src="@{/js/passbook.js}"></script>
+        <script th:src="@{/js/loan.js}"></script>
     </body>
 </html>
