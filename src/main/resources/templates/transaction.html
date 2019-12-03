@@ -30,10 +30,152 @@
         </nav>
 
         <!--Content-->
-        <div class="container">
-            <div class="row">
-                <h1>Manage Transactions</h1>
-            </div>
+        <div class="container-fluid">
+            <main>
+                <!-- View Search Bar -->
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <h1 class="">Customer Service</h1>
+                        <div class="accordion" id="accordion">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Deposit a Check
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <form th:action="@{/transactions/checks}" method="POST" class="transactionInputField">
+                                            <div class="form-group">
+                                                <label for="depositCheckFromAccount">From Account No.</label>
+                                                <input name="fromAccountNo" type="text" class="form-control" id="depositCheckFromAccount" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="depositCheckToAccount">To Account No.</label>
+                                                <input name="toAccountNo" type="text" class="form-control" id="depositCheckToAccount" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="depositCheckAmount">Cheque Amount ($)</label>
+                                                <input name="amount" type="text" class="form-control" id="depositCheckAmount" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Deposit Check</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Cash Withdrawal
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <form class="transactionInputField">
+                                            <div class="form-group">
+                                                <label for="cashViewAccoutNo">Account No.</label>
+                                                <input name="accountNo" type="text" class="form-control" id="cashViewAccoutNo" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-info" id="viewBalanceBtn">View Balance</button>
+                                        </form>
+                                        <form th:action="@{/transactions/cash/withdraw}" method="POST" class="transactionInputField hidden" id="cashWithdrawForm">
+                                            <div class="form-group">
+                                                <label for="cashWithdrawAccoutNo">Account No.</label>
+                                                <input name="accountNo" type="text" class="form-control" id="cashWithdrawAccoutNo" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cashWithdrawBalance">Available Balance ($)</label>
+                                                <input name="accountNo" type="text" class="form-control" id="cashWithdrawBalance" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cashWithdrawAmount">Withdraw Amount ($)</label>
+                                                <input name="amount" type="number" min="0.00" step="0.01" class="form-control" id="cashWithdrawAmount" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" id="submitWithdrawBtn">Withdraw</button>
+                                            <button class="btn btn-secondary" id="cancelWithdrawBtn">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Cash Deposit
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <form th:action="@{/transactions/cash/deposit}" method="POST" class="transactionInputField">
+                                            <div class="form-group">
+                                                <label for="cashDepositAccoutNo">Account No.</label>
+                                                <input name="accountNo" type="text" class="form-control" id="cashDepositAccoutNo" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cashDepositAmount">Deposit Amount ($)</label>
+                                                <input name="amount" type="number" min="0.00" step="0.01" class="form-control" id="cashDepositAmount" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Deposit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingFour">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Pay a Loan
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <form th:action="@{/transactions/loan/payment}" method="POST" class="transactionInputField">
+                                            <div class="form-group">
+                                                <label for="loanPaymentLoanNo">Loan No.</label>
+                                                <input name="loanNo" type="text" class="form-control" id="loanPaymentLoanNo" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="loanPaymentAccountNo">Account No.</label>
+                                                <input name="accountNo" type="text" class="form-control" id="loanPaymentAccountNo" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="loanPaymentAmount">Deposit Amount ($)</label>
+                                                <input name="amount" type="number" min="0.00" step="0.01" class="form-control" id="loanPaymentAmount" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Make Payment</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- View DB Success/Fail -->
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <!-- Error Handler -->
+                        <div th:each="error : ${error}">
+                            <div class="alert alert-danger" role="alert">
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                        <!-- Success Prompt -->
+                        <div th:each="success : ${success}">
+                            <div class="alert alert-success" role="alert">
+                                <span th:text="${success}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
 
 
