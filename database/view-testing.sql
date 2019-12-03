@@ -76,6 +76,17 @@ alter TABLE loan add column date_taken DATE after branch_name; -- LOAN
 CREATE TABLE has_loan(loan_no INT, customer_ssn VARCHAR(11));
 INSERT INTO has_loan VALUES (100000000,'135-00-8888'); 
 INSERT INTO has_loan VALUES (100000001,'135-00-8888'); 
+
+
+CREATE TABLE payment(payment_no INT primary key auto_increment, loan_no INT, payment_amount DOUBLE, payment_date DATE);
+drop table payment;
+INSERT INTO payment(loan_no, payment_amount, payment_date) VALUES
+(100000000, 100.00, '2019-12-02'),
+(100000001, 100.00, '2019-05-10'),
+(100000001, 300.00, '2019-06-16'),
+(100000001, 200.00, '2019-07-11'),
+(100000001, 500.00, '2019-08-08');
+
 -- ***************************************
 
 -- Insert values to spencer tables (NOTE: I NULLED OUT A BUNCH OF STUFF FOR ADDRESS)

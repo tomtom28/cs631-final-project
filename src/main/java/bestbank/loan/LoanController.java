@@ -32,7 +32,7 @@ public class LoanController {
             loan.setPayments(loanDAO.getPayments(loanNo));
             loan.processPayments();
             // Send to Template
-            model.addAttribute("loanPrincipal", loanPrincipal);
+            model.addAttribute("loanPrincipal", loan.getProcessedPrincipal());
             model.addAttribute("loanDate", loanDate);
             model.addAttribute("payments", loan.getProcessedPayments());
         } else {
@@ -55,7 +55,7 @@ public class LoanController {
             loan.setPayments(loanDAO.getPayments(loanNo));
             loan.processPayments();
             // Send to Template
-            model.addAttribute("loanPrincipal", loanPrincipal);
+            model.addAttribute("loanPrincipal", loan.getProcessedPrincipal());
             model.addAttribute("loanDate", loanDate);
             model.addAttribute("payments", loan.getProcessedPayments());
         } else {

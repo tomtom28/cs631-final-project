@@ -153,7 +153,7 @@
                             <tr th:each="payment: ${payments}">
                                 <td><span th:text="${payment[0]}"></span></td>
                                 <td><span>Payment</span></td>
-                                <td><span th:text="${payment[1]}"></span></td>
+                                <td>$<span th:text="${payment[1]}"></span></td>
                                 <td>$<span th:text="${payment[2]}"></span></td>
                             </tr>
                             </tbody>

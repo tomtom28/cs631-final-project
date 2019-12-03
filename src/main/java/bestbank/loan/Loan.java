@@ -28,16 +28,15 @@ public class Loan {
 
         for(int i=0; i < payments.size(); i++) {
             String[] payment = payments.get(i);
-            String[] cleanPayment = new String[6];
+            String[] cleanPayment = new String[3];
 
             // Copy over values
-            cleanPayment[0] = payment[0];
-            cleanPayment[1] = payment[1];
-            cleanPayment[2] = payment[2];
+            cleanPayment[0] = payment[0]; // payment date
+            cleanPayment[1] = String.format("%.2f", Double.parseDouble(payment[1])); // payment amount
 
             // Update Balance
-            currentBalance = currentBalance - Double.parseDouble(payment[2]);
-            cleanPayment[3] = Double.toString(currentBalance);
+            currentBalance = currentBalance - Double.parseDouble(payment[1]);
+            cleanPayment[2] = String.format("%.2f", currentBalance); // updated balance
 
             // Append
             processedPayments.add(cleanPayment);
@@ -46,6 +45,10 @@ public class Loan {
 
     public ArrayList<String[]> getProcessedPayments() {
         return this.processedPayments;
+    }
+
+    public String getProcessedPrincipal() {
+        return String.format("%.2f", loanPrincipal);
     }
 
 }
