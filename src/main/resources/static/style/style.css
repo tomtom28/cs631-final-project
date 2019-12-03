@@ -51,3 +51,13 @@ h3.passbook {
 h3.loans {
     margin-top: 20px;
 }
+
+/*Transaction*/
+.transactionInputField {
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+
+#cashWithdrawForm {
+    margin-top: 20px;
+}
