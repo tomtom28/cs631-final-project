@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
-    console.log('transaction page');
-
     // Click Listener
-    $('#submit').on("click", function(){
-        console.log('submitted');
+    $('.select-loan').on("click", function(){
+        var loanNo = $(this).data('loan');
+        // Redirect to new page
+        window.location = '/loans/payments/' + loanNo;
     });
-
 
 });
