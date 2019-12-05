@@ -8,7 +8,7 @@ public class ApplicationDAO {
 
     // Database Credentials
     private static String userName = "root";
-    private static String password = "root";
+    private static String password = "";
     private static String dataBaseURL = "jdbc:mysql://localhost:3306/bestbank";
 
     // Gets DB Connection Instance

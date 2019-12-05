@@ -1,5 +1,7 @@
 use bestbank;
 
+SET GLOBAL time_zone = '-5:00';
+
 CREATE TABLE account(
 account_no INTEGER AUTO_INCREMENT PRIMARY KEY,
 balance DOUBLE);
