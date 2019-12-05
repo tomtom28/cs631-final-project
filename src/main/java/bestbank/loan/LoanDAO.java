@@ -69,7 +69,7 @@ public class LoanDAO {
             String query = "SELECT c.last_name, c.first_name, c.ssn, l.loan_no " +
                     "FROM customer c, has_loan l " +
                     "WHERE first_name = ? AND last_name = ? " +
-                    "AND c.ssn=l.customer_ssn";
+                    "AND c.ssn=l.ssn";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, firstName);
             stmt.setString(2, lastName);
@@ -95,7 +95,7 @@ public class LoanDAO {
         ArrayList<String[]> payments = new ArrayList<>(0);
         try {
             Statement stmt = conn.createStatement();
-            ResultSet paymentSet = stmt.executeQuery("SELECT payment_date, payment_amount FROM payment WHERE loan_no = " + loanNo + " ORDER BY payment_date ASC");
+            ResultSet paymentSet = stmt.executeQuery("SELECT payment_date, payment_amount FROM loan_payment WHERE loan_no = " + loanNo + " ORDER BY payment_date ASC");
 
             // Iterate over transactions
             while (paymentSet.next()) {
