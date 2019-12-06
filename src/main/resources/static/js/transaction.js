@@ -35,4 +35,10 @@ $(document).ready(function() {
     });
     return false;
   });
+
+  // For Receipt Printing
+  $(".printPageBtn").on("click", function() {
+    window.print();
+  });
+
 });
