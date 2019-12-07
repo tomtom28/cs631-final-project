@@ -71,8 +71,9 @@ public class CustomerController {
         } catch (SQLException e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
+        }finally {
+            customerDAO.close();
         }
-        customerDAO.close();
         return "customer";
     }
 
@@ -80,37 +81,107 @@ public class CustomerController {
     public String addCustomer(@RequestParam(name="ssn") String ssn,
                               @RequestParam(name="branchName") String branchName,
                               @RequestParam(name="accountType") String accountType,
-                              @RequestParam(name="interest") String interest,
-                              @RequestParam(name="balance") String balance, Model model) {
+                              @RequestParam(name="interestOrOverdraft") String interestOrOverdraft,
+                              @RequestParam(name="balance") String balanceStr, Model model) {
 
         // Create Customer & DAO object
         CustomerDAO customerDAO = new CustomerDAO();
         this.appendAllBranches(model, customerDAO); // for branches drop down
 
+        double balance = Double.parseDouble(balanceStr);
+
         String actionType = "[Add a New Account]";
+
+        if(balance < 500.0)
+        {
+            model.addAttribute("error","Action " + actionType + " Failed: " +
+                    "The minimum amount to create an account is $500.00"); // custom message
+
+            return "customer";
+        }
+
         try {
-            String accountNo = customerDAO.addNewAccount(ssn, branchName, accountType, interest, balance);
+            String accountNo = customerDAO.addNewAccount(ssn, branchName, accountType, interestOrOverdraft, balance);
             model.addAttribute("success","Action " + actionType + " Completed: " +
                     "Account No: " + accountNo + " added to Branch: " + branchName + "for Customer SSN: " + ssn + ".");
         } catch (SQLException e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
+        } finally {
+            customerDAO.close();
         }
-        customerDAO.close();
         return "customer";
     }
 
 
-    // TODO: ADD PostMapping: /customers/add/account
+    @PostMapping("/customers/remove/account")
+    public String removeAccount(@RequestParam(name="accountNo") String accountNo,  Model model){
+
+        // Create Customer & DAO object
+        CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
+
+        String actionType = "[Remove Account]";
+        try {
+            String removedAccountNo = customerDAO.removeCustomerAccount(accountNo);
+            model.addAttribute("success","Action " + actionType + " Completed: " +
+                    "Account No: " + removedAccountNo + " has successfully been removed.");
+        } catch (SQLException e) {
+            model.addAttribute("error","Action " + actionType + " Failed: " +
+                    e.getMessage()); // message from DB
+        }finally {
+            customerDAO.close();
+        }
+
+        return "customer";
+    }
+
+    @PostMapping("/customers/add/loan")
+    public String addLoan(@RequestParam(name="ssn") String ssn,
+                          @RequestParam(name="branchName") String branchName,
+                          @RequestParam(name="amount") String amount ,Model model){
+
+        // Create Customer & DAO object
+        CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
+
+        String actionType = "[Add Loan]";
+        try {
+            String addedLoanNo = customerDAO.addCustomerLoan(ssn, branchName, amount);
+            model.addAttribute("success","Action " + actionType + " Completed: " +
+                    "Loan No: " + addedLoanNo + " has successfully been added.");
+        } catch (SQLException e) {
+            model.addAttribute("error","Action " + actionType + " Failed: " +
+                    e.getMessage()); // message from DB
+        }finally {
+            customerDAO.close();
+        }
+
+        return "customer";
+    }
 
 
-    // TODO: ADD PostMapping: /customers/remove/account
+    @PostMapping("/customers/remove/loan")
+    public String removeLoan(@RequestParam(name="loanNo") String loanNo,  Model model){
 
+        // Create Customer & DAO object
+        CustomerDAO customerDAO = new CustomerDAO();
+        this.appendAllBranches(model, customerDAO); // for branches drop down
 
-    // TODO: ADD PostMapping: /customers/add/loan
+        String actionType = "[Remove Loan]";
+        try {
+            String removedLoanNo = customerDAO.removeCustomerLoan(loanNo);
+            model.addAttribute("success","Action " + actionType + " Completed: " +
+                    "Loan No: " + removedLoanNo + " has successfully been removed.");
+        } catch (SQLException e) {
+            model.addAttribute("error","Action " + actionType + " Failed: " +
+                    e.getMessage()); // message from DB
+        }finally {
+            customerDAO.close();
+        }
 
-
-    // TODO: ADD PostMapping: /customers/remove/loan
+        return "customer";
+    }
 
 
 

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CustomerDAO {
@@ -77,16 +78,92 @@ public class CustomerDAO {
     }
 
 
-    public String addNewAccount(String ssn, String branchName, String accountType, String interest, String balance) throws SQLException {
+    public String addNewAccount(String ssn, String branchName, String accountType, String interestOrOverdraft, double balance) throws SQLException {
 
+        String lastAccessed = LocalDate.now().toString();
         // Insert New Account
-        // TODO - insert new record to DB (assumes that Account No is auto increment)
+        conn.setAutoCommit(false);
+        String query = "INSERT INTO account(balance, last_accessed, branch_name) VALUES(?,?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setDouble(1, balance);
+        stmt.setString(2, lastAccessed);
+        stmt.setString(3, branchName);
+        stmt.execute();
 
-        // Get Latest (i.e. biggest #) Account No
-        String newAccountNo = "99999999";
-        // TODO - query largest Account No for the given ssn
+        // query db for account number
+        PreparedStatement stmt2 = conn.prepareStatement("SELECT MAX(account_no) AS new_account_no FROM account");
+        ResultSet accountSet = stmt2.executeQuery();
+        accountSet.next();
+        String newAccountNo = accountSet.getString("new_account_no");
+
+        // need to make query for has account
+        PreparedStatement stmt3 = conn.prepareStatement("INSERT INTO has_account (account_no, ssn) VALUES(?,?)");
+        stmt3.setString(1, newAccountNo);
+        stmt3.setString(2, ssn);
+        stmt3.execute();
+
+        // insert new record to DB (assumes that Account No is auto increment)
+        if(accountType.equals("savings")) {
+            PreparedStatement stmt4 = conn.prepareStatement("INSERT INTO savings_account (account_no, interest_rate) VALUES(?,?)");
+            stmt4.setString(1, newAccountNo);
+            stmt4.setString(2, interestOrOverdraft);
+            stmt4.execute();
+        } else {
+            PreparedStatement stmt5 = conn.prepareStatement("INSERT INTO checking_account (account_no, overdraft) VALUES(?,?)");
+            stmt5.setString(1, newAccountNo);
+            stmt5.setString(2, interestOrOverdraft);
+            stmt5.execute();
+        }
+
+        conn.commit();
 
         return newAccountNo;
+    }
+
+    public String removeCustomerAccount(String accountNo) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM account WHERE account_no = ?");
+        stmt.setString(1, accountNo);
+        stmt.execute();
+
+        return accountNo;
+    }
+
+    public String addCustomerLoan(String ssn, String branchName, String amount) throws SQLException {
+
+        String loanDateTaken = LocalDate.now().toString();
+        conn.setAutoCommit(false);
+
+        //INSERT into loan
+        String query1 = "INSERT INTO loan(loan_amount, date_taken) VALUES(?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query1);
+        stmt.setString(1, amount);
+        stmt.setString(2, loanDateTaken);
+        stmt.execute();
+
+
+        // query db for account number
+        PreparedStatement stmt2 = conn.prepareStatement("SELECT MAX(loan_no) AS new_loan_no FROM loan");
+        ResultSet accountSet = stmt2.executeQuery();
+        accountSet.next();
+        String newLoanNo = accountSet.getString("new_loan_no");
+
+        //INSERT into has_loan
+        String query2 = "INSERT INTO has_loan(loan_no, ssn) VALUES(?,?) ";
+        PreparedStatement stmt3 = conn.prepareStatement(query2);
+        stmt3.setString(1, newLoanNo);
+        stmt3.setString(2, ssn);
+        stmt3.execute();
+        conn.commit();
+
+        return newLoanNo;
+    }
+
+    public String removeCustomerLoan(String loanNo) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM loan WHERE loan_no = ?");
+        stmt.setString(1, loanNo);
+        stmt.execute();
+
+        return loanNo;
     }
 
 
