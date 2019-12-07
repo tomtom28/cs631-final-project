@@ -63,10 +63,11 @@ public class TransactionDAO {
 
     public void depositCheque(String fromAccountNo, String toAccountNo, double amount) throws Exception {
 
-        // Check is cheque bounces
+        // Check is cheque bounces (checking account is allowed to go into overdraft)
         double fromAccountBalance = this.getAccountBalance(fromAccountNo);
-        if (fromAccountBalance < amount) {
-            throw new Exception("Check Bounced. AccountNo: " + fromAccountNo + " has insufficient funds to process your cheque!");
+        double overdraftAllowed = this.getOverDraftAllowed(fromAccountNo);
+        if ( ((fromAccountBalance - amount) < 0) && (Math.abs(fromAccountBalance - amount) > overdraftAllowed) ) {
+            throw new Exception("Check Bounced. AccountNo: " + fromAccountNo + " has insufficient funds to process the cheque!");
         }
 
         // TODO: If cheque is good then Withdraw Transaction goes to fromAccount

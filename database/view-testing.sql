@@ -135,3 +135,69 @@ VALUES ('135-00-8888',100000000),
 ('231-00-8888',100000000),
 ('135-00-8888',100000002);
 
+
+
+
+-- PASSBOOK BOOK VIEW TESTING
+-- passbook(account_no, transaction_date, transaction_code, transaction_name, debit, credit)
+
+SELECT t.record_no, t.account_no, t.date, t.transaction_code, tt.transaction_name
+FROM `transaction` t, `transaction_type` tt
+WHERE t.transaction_code = tt.transaction_code;
+
+-- Credits
+SELECT tc.record_no, tc.account_no, tc.amount AS 'credit'
+FROM `transaction` tc, `transaction_type` ttc
+WHERE tc.transaction_code = ttc.transaction_code AND ttc.classification='credit';
+
+-- Debits
+SELECT td.record_no, td.account_no, td.amount AS 'debit'
+FROM `transaction` td, `transaction_type` ttd
+WHERE td.transaction_code = ttd.transaction_code AND ttd.classification='debit';
+
+
+
+-- MAKE VIEWS...
+CREATE VIEW account_credits AS -- CREDITS
+SELECT tc.record_no, tc.account_no, tc.amount AS 'credit'
+FROM `transaction` tc, `transaction_type` ttc
+WHERE tc.transaction_code = ttc.transaction_code AND ttc.classification='credit';
+
+
+CREATE VIEW account_debits AS -- DEBITS
+SELECT td.record_no, td.account_no, td.amount AS 'debit'
+FROM `transaction` td, `transaction_type` ttd
+WHERE td.transaction_code = ttd.transaction_code AND ttd.classification='debit';
+
+CREATE VIEW account_passbooks AS -- PASSBOOK
+SELECT t.record_no, t.account_no, t.date, t.transaction_code, tt.transaction_name, ad.debit, ac.credit
+FROM `transaction` t
+LEFT JOIN account_debits ad
+ON t.account_no = ad.account_no AND t.record_no = ad.record_no
+LEFT JOIN account_credits ac
+ON t.account_no = ac.account_no AND t.record_no = ac.record_no
+JOIN transaction_type tt
+ON t.transaction_code = tt.transaction_code;
+
+SELECT * FROM account_passbooks;
+
+
+
+
+-- MAKE TRIGGERS !!!!!!!!!
+-- determine balance
+SELECT sum(credit) - sum(debit) as balance
+FROM account_passbooks
+WHERE account_no = 100000000;
+
+
+-- set current balances in DB (with seeded data)
+UPDATE account
+SET balance = (SELECT sum(credit) - sum(debit)
+	FROM account_passbooks
+	WHERE account_no = 100000004)
+WHERE account_no = 100000004; -- REPEATED FOR EACH account 100000000 thru 100000004
+
+
+
+
