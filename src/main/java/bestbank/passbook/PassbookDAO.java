@@ -70,17 +70,25 @@ public class PassbookDAO {
         ArrayList<String[]> transactions = new ArrayList<>(0);
         try {
             Statement transactionStmt = conn.createStatement();
-            ResultSet transactionSet = transactionStmt.executeQuery("SELECT * FROM passbook WHERE account_no = " + accountNo + " ORDER BY transaction_date ASC");
+            ResultSet transactionSet = transactionStmt.executeQuery("SELECT * FROM account_passbooks WHERE account_no = " + accountNo + " ORDER BY date ASC");
 
             // Iterate over transactions
             while (transactionSet.next()) {
+
                 String[] transaction = {
-                    transactionSet.getString("transaction_date"),
+                    transactionSet.getString("date"),
                     transactionSet.getString("transaction_code"),
                     transactionSet.getString("transaction_name"),
                     transactionSet.getString("debit"),
                     transactionSet.getString("credit")
                 };
+
+                // Remove BF (Balance Forward)
+                if (transactionSet.getString("transaction_code").equals("BF")) transaction[1] = "";
+
+                // Clean up NULL values
+                if (transactionSet.getString("debit") == null) transaction[3] = "0.0";
+                if (transactionSet.getString("credit") == null) transaction[4] = "0.0";
 
                 // Append to list
                 transactions.add(transaction);

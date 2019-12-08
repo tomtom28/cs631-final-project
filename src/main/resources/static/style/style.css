@@ -61,3 +61,7 @@ h3.loans {
 #cashWithdrawForm {
     margin-top: 20px;
 }
+
+.receipt > .card {
+    margin-top: 5vh;
+}
