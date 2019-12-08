@@ -128,11 +128,11 @@ public class TransactionController {
 
             return "receipts/account";
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             // Throw Error to Transaction page (if failed)
             model.addAttribute("error","Action " + actionType + " Failed: " +
-                    e.getMessage()); // message from DB
+                    e.getMessage()); // message from DB or DAO
             return "transaction";
 
         } finally {

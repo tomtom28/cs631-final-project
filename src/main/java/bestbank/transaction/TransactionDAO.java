@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TransactionDAO {
 
@@ -18,9 +21,13 @@ public class TransactionDAO {
 
     public double getAccountBalance(String accountNo) throws SQLException {
 
-        // TODO determine balance ... likely a derived attribute on the account table
-        double balance = 100.00;
+        // Query account balance, a derived attribute on the account table
+        PreparedStatement stmt = conn.prepareStatement("SELECT balance FROM account WHERE account_no = ?");
+        stmt.setString(1, accountNo);
+        ResultSet rSet = stmt.executeQuery();
+        rSet.next();
 
+        double balance = rSet.getDouble("balance");
         return balance;
     }
 
@@ -45,9 +52,10 @@ public class TransactionDAO {
     public void payLoan(String loanNo, String accountNo, String amount) throws SQLException {
 
         // TODO process request (do NOT use a try-catch here)
-        // Insert "Loan Payment" transaction for the given accountNo
+        // Be sure to use conn.setAutoCommit(false);
+        // Insert "LP" transaction for the given accountNo
         // Insert loan_payment for given loanNo
-        // Also need to update the last_modified field on the account that paid the loan
+        // Update the last_accessed field on the account that paid the loan
 
     }
 
@@ -57,14 +65,40 @@ public class TransactionDAO {
         // Also need to update the last_modified field on the account
 
 
-
     }
 
 
-    public void makeCashWithdrawal(String accountNo, double amount) throws SQLException {
-        // TODO process request (do NOT use a try-catch here)
-        // Also need to update the last_modified field on the account
+    public void makeCashWithdrawal(String accountNo, double amount) throws Exception {
 
+        // Check for savings / checking overdraft (checking account is allowed to go into overdraft)
+        double accountBalance = this.getAccountBalance(accountNo);
+        double overdraftAllowed = this.getOverDraftAllowed(accountNo);
+        if ( ((accountBalance - amount) < 0) && (Math.abs(accountBalance - amount) > overdraftAllowed) ) {
+            throw new Exception("Unable to process withdrawal. AccountNo: " + accountNo + " has insufficient funds!");
+        }
+
+        // Prevent auto-commit, all transactions must be valid to be processed
+        conn.setAutoCommit(false);
+
+        // Withdraw from account
+        String query = "INSERT INTO transaction(account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, accountNo);
+        stmt.setString(2, "WD");
+        stmt.setString(3, this.getFormattedCurrentDate());
+        stmt.setString(4, this.getFormattedCurrentTime());
+        stmt.setDouble(5, amount);
+        stmt.execute();
+
+        // Update Last Accessed date of the account
+        String query2 = "UPDATE account SET last_accessed = ? WHERE account_no = ? ";
+        PreparedStatement stmt2 = conn.prepareStatement(query2);
+        stmt2.setString(1, this.getFormattedCurrentDate());
+        stmt2.setString(2, accountNo);
+        stmt2.execute();
+
+        // Commit all the changes at once
+        conn.commit();
     }
 
 
@@ -77,10 +111,65 @@ public class TransactionDAO {
             throw new Exception("Check Bounced. AccountNo: " + fromAccountNo + " has insufficient funds to process the cheque!");
         }
 
-        // TODO: If cheque is good then Withdraw Transaction goes to fromAccount ... also need to update the last_modified field on the from_account
-        // And then Deposit Transaction goes to toAccount ... also need to update the last_modified field on the to_account
+        // Prevent auto-commit, all transactions must be valid to be processed
+        conn.setAutoCommit(false);
+
+        // Withdraw from "from" account
+        String query = "INSERT INTO transaction(account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, fromAccountNo);
+        stmt.setString(2, "QW");
+        stmt.setString(3, this.getFormattedCurrentDate());
+        stmt.setString(4, this.getFormattedCurrentTime());
+        stmt.setDouble(5, amount);
+        stmt.execute();
+
+        // Update Last Modified date of "from" account
+        String query2 = "UPDATE account SET last_accessed = ? WHERE account_no = ? ";
+        PreparedStatement stmt2 = conn.prepareStatement(query2);
+        stmt2.setString(1, this.getFormattedCurrentDate());
+        stmt2.setString(2, fromAccountNo);
+        stmt2.execute();
+
+        // Deposit into "to" account
+        String query3 = "INSERT INTO transaction(account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?) ";
+        PreparedStatement stmt3 = conn.prepareStatement(query3);
+        stmt3.setString(1, toAccountNo);
+        stmt3.setString(2, "QD");
+        stmt3.setString(3, this.getFormattedCurrentDate());
+        stmt3.setString(4, this.getFormattedCurrentTime());
+        stmt3.setDouble(5, amount);
+        stmt3.execute();
+
+        // Update Last Modified date of "to" account
+        String query4 = "UPDATE account SET last_accessed = ? WHERE account_no = ? ";
+        PreparedStatement stmt4 = conn.prepareStatement(query4);
+        stmt4.setString(1, this.getFormattedCurrentDate());
+        stmt4.setString(2, toAccountNo);
+        stmt4.execute();
+
+        // Commit all the changes at once
+        conn.commit();
 
     }
+
+
+    private String getFormattedCurrentTime() {
+
+        // Returns time in 12:00 AM / 1:00 PM format
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime localTime = LocalTime.now();
+        String currentTime = dtf.format(localTime);
+
+        return currentTime;
+    }
+
+
+    private String getFormattedCurrentDate() {
+        String currentDate = LocalDate.now().toString();
+        return currentDate;
+    }
+
 
 
     public void close() {

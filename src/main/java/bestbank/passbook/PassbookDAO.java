@@ -70,7 +70,7 @@ public class PassbookDAO {
         ArrayList<String[]> transactions = new ArrayList<>(0);
         try {
             Statement transactionStmt = conn.createStatement();
-            ResultSet transactionSet = transactionStmt.executeQuery("SELECT * FROM account_passbooks WHERE account_no = " + accountNo + " ORDER BY date ASC");
+            ResultSet transactionSet = transactionStmt.executeQuery("SELECT * FROM account_passbooks WHERE account_no = " + accountNo + " ORDER BY date, record_no ASC");
 
             // Iterate over transactions
             while (transactionSet.next()) {
