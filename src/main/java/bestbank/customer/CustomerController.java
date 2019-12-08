@@ -103,7 +103,7 @@ public class CustomerController {
         try {
             String accountNo = customerDAO.addNewAccount(ssn, branchName, accountType, interestOrOverdraft, balance);
             model.addAttribute("success","Action " + actionType + " Completed: " +
-                    "Account No: " + accountNo + " added to Branch: " + branchName + "for Customer SSN: " + ssn + ".");
+                    "Account No: " + accountNo + " added to Branch: " + branchName + " for Customer SSN: " + ssn + ".");
         } catch (SQLException e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
