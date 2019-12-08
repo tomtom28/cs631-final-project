@@ -95,7 +95,8 @@ public class LoanDAO {
         ArrayList<String[]> payments = new ArrayList<>(0);
         try {
             Statement stmt = conn.createStatement();
-            ResultSet paymentSet = stmt.executeQuery("SELECT payment_date, payment_amount FROM loan_payment WHERE loan_no = " + loanNo + " ORDER BY payment_date ASC");
+            ResultSet paymentSet = stmt.executeQuery("SELECT payment_date, payment_amount FROM loan_payment WHERE loan_no = " + loanNo +
+                    " ORDER BY payment_date, payment_no ASC");
 
             // Iterate over transactions
             while (paymentSet.next()) {
