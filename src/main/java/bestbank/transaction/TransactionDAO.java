@@ -45,18 +45,25 @@ public class TransactionDAO {
     public void payLoan(String loanNo, String accountNo, String amount) throws SQLException {
 
         // TODO process request (do NOT use a try-catch here)
+        // Insert "Loan Payment" transaction for the given accountNo
+        // Insert loan_payment for given loanNo
+        // Also need to update the last_modified field on the account that paid the loan
 
     }
 
     public void makeCashDeposit(String accountNo, double amount) throws SQLException {
 
         // TODO process request (do NOT use a try-catch here)
+        // Also need to update the last_modified field on the account
+
+
 
     }
 
 
     public void makeCashWithdrawal(String accountNo, double amount) throws SQLException {
         // TODO process request (do NOT use a try-catch here)
+        // Also need to update the last_modified field on the account
 
     }
 
@@ -70,8 +77,8 @@ public class TransactionDAO {
             throw new Exception("Check Bounced. AccountNo: " + fromAccountNo + " has insufficient funds to process the cheque!");
         }
 
-        // TODO: If cheque is good then Withdraw Transaction goes to fromAccount
-        // todo AND THEN Deposit Transaction goes to toAccount (maybe we can make a new "Cheque Deposit" transaction_type)?
+        // TODO: If cheque is good then Withdraw Transaction goes to fromAccount ... also need to update the last_modified field on the from_account
+        // And then Deposit Transaction goes to toAccount ... also need to update the last_modified field on the to_account
 
     }
 
