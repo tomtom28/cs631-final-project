@@ -134,10 +134,11 @@ public class CustomerDAO {
         conn.setAutoCommit(false);
 
         //INSERT into loan
-        String query1 = "INSERT INTO loan(loan_amount, date_taken) VALUES(?,?) ";
+        String query1 = "INSERT INTO loan(loan_amount, date_taken, branch_name) VALUES(?,?,?) ";
         PreparedStatement stmt = conn.prepareStatement(query1);
         stmt.setString(1, amount);
         stmt.setString(2, loanDateTaken);
+        stmt.setString(3, branchName);
         stmt.execute();
 
 
@@ -165,11 +166,6 @@ public class CustomerDAO {
 
         return loanNo;
     }
-
-
-    // TODO: add helper methods for new PostMappings in CustomerController
-
-
 
     public void close() {
         try {
