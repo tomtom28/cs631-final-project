@@ -28,6 +28,7 @@ public class PassbookController {
             passbook.setTransactions(passbookDAO.getTransactions(accountNo));
             passbook.processTransactions();
             // Send to Template
+            model.addAttribute("listOfCustomerSSNs", passbookDAO.getAccountCustomerSSNs(accountNo));
             model.addAttribute("transactions", passbook.getProcessedTransactions());
         } else {
             model.addAttribute("error", "Account No: \"" + accountNo + "\" was not found! Please try another 9-digit account number.");
@@ -47,6 +48,7 @@ public class PassbookController {
             passbook.setTransactions(passbookDAO.getTransactions(accountNo));
             passbook.processTransactions();
             // Send to Template
+            model.addAttribute("listOfCustomerSSNs", passbookDAO.getAccountCustomerSSNs(accountNo));
             model.addAttribute("transactions", passbook.getProcessedTransactions());
         } else {
             model.addAttribute("error", "Account No: \"" + accountNo + "\" was not found! Please try another 9-digit account number.");
