@@ -78,7 +78,7 @@ public class CustomerDAO {
     }
 
 
-    public String addNewAccount(String ssn, String branchName, String accountType, String interestOrOverdraft, double balance) throws SQLException {
+    public String addNewAccount(String[] customerSSNs, String branchName, String accountType, String interestOrOverdraft, double balance) throws SQLException {
 
         String lastAccessed = LocalDate.now().toString();
         // Insert New Account
@@ -96,11 +96,15 @@ public class CustomerDAO {
         accountSet.next();
         String newAccountNo = accountSet.getString("new_account_no");
 
-        // need to make query for has account
-        PreparedStatement stmt3 = conn.prepareStatement("INSERT INTO has_account (account_no, ssn) VALUES(?,?)");
-        stmt3.setString(1, newAccountNo);
-        stmt3.setString(2, ssn);
-        stmt3.execute();
+        // Batch insert into has_account
+        String query2 = "INSERT INTO has_account(account_no, ssn) VALUES(?,?) ";
+        PreparedStatement stmt3 = conn.prepareStatement(query2);
+        for(String ssn : customerSSNs) {
+            stmt3.setString(1, newAccountNo);
+            stmt3.setString(2, ssn);
+            stmt3.addBatch();
+        }
+        stmt3.executeBatch();
 
         // insert new record to DB (assumes that Account No is auto increment)
         if(accountType.equals("savings")) {
@@ -128,12 +132,12 @@ public class CustomerDAO {
         return accountNo;
     }
 
-    public String addCustomerLoan(String ssn, String branchName, String amount) throws SQLException {
+    public String addCustomerLoan(String[] customerSSNs, String branchName, String amount, String loanDescription) throws SQLException {
 
         String loanDateTaken = LocalDate.now().toString();
         conn.setAutoCommit(false);
 
-        //INSERT into loan
+        // Insert into loan
         String query1 = "INSERT INTO loan(loan_amount, date_taken, branch_name) VALUES(?,?,?) ";
         PreparedStatement stmt = conn.prepareStatement(query1);
         stmt.setString(1, amount);
@@ -141,19 +145,31 @@ public class CustomerDAO {
         stmt.setString(3, branchName);
         stmt.execute();
 
-
-        // query db for account number
+        // Query db for loan number
         PreparedStatement stmt2 = conn.prepareStatement("SELECT MAX(loan_no) AS new_loan_no FROM loan");
         ResultSet accountSet = stmt2.executeQuery();
         accountSet.next();
         String newLoanNo = accountSet.getString("new_loan_no");
 
-        //INSERT into has_loan
+        // Add loan description (if needed)
+        if (!loanDescription.equals("")) {
+            PreparedStatement stmt2b = conn.prepareStatement("UPDATE loan SET description = ? WHERE loan_no = ?");
+            stmt2b.setString(1, loanDescription);
+            stmt2b.setString(2, newLoanNo);
+            stmt2b.execute();
+        }
+
+        // Batch insert into has_loan
         String query2 = "INSERT INTO has_loan(loan_no, ssn) VALUES(?,?) ";
         PreparedStatement stmt3 = conn.prepareStatement(query2);
-        stmt3.setString(1, newLoanNo);
-        stmt3.setString(2, ssn);
-        stmt3.execute();
+        for(String ssn : customerSSNs) {
+            stmt3.setString(1, newLoanNo);
+            stmt3.setString(2, ssn);
+            stmt3.addBatch();
+        }
+        stmt3.executeBatch();
+
+        // Commit all changes at once
         conn.commit();
 
         return newLoanNo;
