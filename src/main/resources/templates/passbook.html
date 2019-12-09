@@ -129,6 +129,7 @@
                         <!-- Display Account No -->
                         <div th:each="account : ${account}">
                             <h3 class="passbook">Passbook for Account No:  <span th:text="${account}"></span></h3>
+                            <h5 class="passbook">Customer SSN(s): <span th:text="${listOfCustomerSSNs}"></span></h5>
                         </div>
 
                         <!-- Display Transactions (only if Account No is returned) -->

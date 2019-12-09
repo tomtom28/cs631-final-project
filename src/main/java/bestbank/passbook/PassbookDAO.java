@@ -98,6 +98,29 @@ public class PassbookDAO {
         }
         return transactions;
     }
+
+    public String getAccountCustomerSSNs(String accountNo) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT ssn FROM has_account WHERE account_no = ?");
+            stmt.setString(1, accountNo);
+            ResultSet ssnSet = stmt.executeQuery();
+
+            // Gets list of customer SSNs (ex. 111-22-3333, 222-66-8888, ...)
+            String customerSSNs = "";
+            while (ssnSet.next()) {
+                customerSSNs = customerSSNs + ssnSet.getNString(1) + ", ";
+            }
+
+            // Trim end (if needed)
+            if (customerSSNs.length() > 3) customerSSNs = customerSSNs.substring(0,customerSSNs.length()-2);
+
+            return customerSSNs;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return "";
+        }
+    }
     
     public void close() {
         try {

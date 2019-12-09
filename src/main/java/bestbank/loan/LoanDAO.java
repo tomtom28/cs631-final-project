@@ -49,6 +49,49 @@ public class LoanDAO {
         }
     }
 
+    public String getLoanCustomerSSNs(String loanNo) {
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT ssn FROM has_loan WHERE loan_no = ?");
+            stmt.setString(1, loanNo);
+            ResultSet ssnSet = stmt.executeQuery();
+
+            // Gets list of customer SSNs (ex. 111-22-3333, 222-66-8888, ...)
+            String customerSSNs = "";
+            while (ssnSet.next()) {
+                customerSSNs = customerSSNs + ssnSet.getNString(1) + ", ";
+            }
+
+            // Trim end (if needed)
+            if (customerSSNs.length() > 3) customerSSNs = customerSSNs.substring(0,customerSSNs.length()-2);
+
+            return customerSSNs;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return "";
+        }
+
+    }
+
+    public String getLoanDescription(String loanNo) {
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT description FROM loan WHERE loan_no = ?");
+            stmt.setString(1, loanNo);
+            ResultSet loanSet = stmt.executeQuery();
+
+            loanSet.next();
+            String description = loanSet.getNString(1);
+            return description;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return "N/A";
+        }
+
+    }
+
     public boolean isValidCustomerName(String firstName, String lastName) {
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM customer WHERE first_name = ?  AND last_name = ?");

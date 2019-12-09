@@ -32,6 +32,8 @@ public class LoanController {
             loan.setPayments(loanDAO.getPayments(loanNo));
             loan.processPayments();
             // Send to Template
+            model.addAttribute("loanDescription", loanDAO.getLoanDescription(loanNo));
+            model.addAttribute("listOfCustomerSSNs", loanDAO.getLoanCustomerSSNs(loanNo));
             model.addAttribute("loanPrincipal", loan.getProcessedPrincipal());
             model.addAttribute("loanDate", loanDate);
             model.addAttribute("payments", loan.getProcessedPayments());
@@ -48,13 +50,17 @@ public class LoanController {
         LoanDAO loanDAO = new LoanDAO();
         if (loanDAO.isValidLoanNo(loanNo)) {
             model.addAttribute("loan", loanNo);
+
             // Create Loan
             double loanPrincipal = loanDAO.getLoanPrincipal(loanNo);
             String loanDate = loanDAO.getLoanDateTaken(loanNo);
             Loan loan = new Loan(loanNo, loanPrincipal, loanDate);
             loan.setPayments(loanDAO.getPayments(loanNo));
             loan.processPayments();
+
             // Send to Template
+            model.addAttribute("loanDescription", loanDAO.getLoanDescription(loanNo));
+            model.addAttribute("listOfCustomerSSNs", loanDAO.getLoanCustomerSSNs(loanNo));
             model.addAttribute("loanPrincipal", loan.getProcessedPrincipal());
             model.addAttribute("loanDate", loanDate);
             model.addAttribute("payments", loan.getProcessedPayments());

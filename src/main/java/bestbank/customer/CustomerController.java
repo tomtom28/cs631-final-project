@@ -92,18 +92,23 @@ public class CustomerController {
 
         String actionType = "[Add a New Account]";
 
-        if(balance < 500.0)
-        {
+        if(balance < 500.0) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     "The minimum amount to create an account is $500.00"); // custom message
 
             return "customer";
         }
 
+        // Parse comma separated list
+        String[] customerSSNs = ssn.split(",");
+        for (int i = 0; i < customerSSNs.length; i++) {
+            customerSSNs[i] = customerSSNs[i].trim();
+        }
+
         try {
-            String accountNo = customerDAO.addNewAccount(ssn, branchName, accountType, interestOrOverdraft, balance);
+            String accountNo = customerDAO.addNewAccount(customerSSNs, branchName, accountType, interestOrOverdraft, balance);
             model.addAttribute("success","Action " + actionType + " Completed: " +
-                    "Account No: " + accountNo + " added to Branch: " + branchName + " for Customer SSN: " + ssn + ".");
+                    "Account No: " + accountNo + " added to Branch: " + branchName + " for Customer SSN(s): " + ssn + ".");
         } catch (SQLException e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
@@ -139,15 +144,22 @@ public class CustomerController {
     @PostMapping("/customers/add/loan")
     public String addLoan(@RequestParam(name="ssn") String ssn,
                           @RequestParam(name="branchName") String branchName,
-                          @RequestParam(name="amount") String amount ,Model model){
+                          @RequestParam(name="description") String loanDescription,
+                          @RequestParam(name="amount") String amount, Model model){
 
         // Create Customer & DAO object
         CustomerDAO customerDAO = new CustomerDAO();
         this.appendAllBranches(model, customerDAO); // for branches drop down
 
+        // Parse comma separated list
+        String[] customerSSNs = ssn.split(",");
+        for (int i = 0; i < customerSSNs.length; i++) {
+            customerSSNs[i] = customerSSNs[i].trim();
+        }
+
         String actionType = "[Add Loan]";
         try {
-            String addedLoanNo = customerDAO.addCustomerLoan(ssn, branchName, amount);
+            String addedLoanNo = customerDAO.addCustomerLoan(customerSSNs, branchName, amount, loanDescription);
             model.addAttribute("success","Action " + actionType + " Completed: " +
                     "Loan No: " + addedLoanNo + " has successfully been added.");
         } catch (SQLException e) {
