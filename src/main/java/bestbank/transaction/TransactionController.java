@@ -183,8 +183,10 @@ public class TransactionController {
 
 
     @PostMapping("/transactions/loan/payment")
-    public String makeLoanPayment(@RequestParam(value="loanNo") String loanNo, @RequestParam(value="accountNo") String accountNo, @RequestParam(value="amount") String amount, Model model) {
+    public String makeLoanPayment(@RequestParam(value="loanNo") String loanNo, @RequestParam(value="accountNo") String accountNo, @RequestParam(value="amount") String amountStr, Model model) {
 
+
+        double amount = Double.parseDouble(amountStr);
         String actionType = "[Loan Payment]";
         TransactionDAO transactionDAO = new TransactionDAO();
         try {
@@ -204,7 +206,7 @@ public class TransactionController {
 
             return "receipts/loan";
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             // Throw Error to Transaction page (if failed)
             model.addAttribute("error","Action " + actionType + " Failed: " +
