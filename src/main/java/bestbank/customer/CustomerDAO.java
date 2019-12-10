@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CustomerDAO {
@@ -119,6 +121,17 @@ public class CustomerDAO {
             stmt5.execute();
         }
 
+        // Insert Balance Forward Transaction
+        PreparedStatement stmt6 = conn.prepareStatement("INSERT INTO transaction (account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?)");
+        stmt6.setString(1, newAccountNo);
+        stmt6.setString(2, "BF");
+        stmt6.setString(3, lastAccessed);
+        stmt6.setString(4, this.getFormattedCurrentTime());
+        stmt6.setDouble(5, balance);
+        stmt6.execute();
+
+
+        // Commit everything at once
         conn.commit();
 
         return newAccountNo;
@@ -181,6 +194,16 @@ public class CustomerDAO {
         stmt.execute();
 
         return loanNo;
+    }
+
+    private String getFormattedCurrentTime() {
+
+        // Returns time in 12:00 AM / 1:00 PM format
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime localTime = LocalTime.now();
+        String currentTime = dtf.format(localTime);
+
+        return currentTime;
     }
 
     public void close() {
