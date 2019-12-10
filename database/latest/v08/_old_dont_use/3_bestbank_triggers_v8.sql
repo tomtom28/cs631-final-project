@@ -16,4 +16,4 @@ FOR EACH ROW
 	SET balance = (	SELECT sum(credit) - sum(debit)
 					FROM account_passbooks ap
 					WHERE ap.account_no = NEW.account_no)
-	WHERE a.account_no = NEW.account_no;
+	WHERE a.account_no = NEW.account_no;     
