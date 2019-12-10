@@ -49,20 +49,65 @@ public class TransactionDAO {
     }
 
 
-    public void payLoan(String loanNo, String accountNo, String amount) throws SQLException {
+    public void payLoan(String loanNo, String accountNo, double amount) throws Exception {
 
-        // TODO process request (do NOT use a try-catch here)
-        // Be sure to use conn.setAutoCommit(false);
-        // Insert "LP" transaction for the given accountNo
+        //Checks if the user has enough to make the payment specified
+        double accountBalance = this.getAccountBalance(accountNo);
+        double overdraftAllowed = this.getOverDraftAllowed(accountNo);
+        if ( ((accountBalance - amount) < 0) && (Math.abs(accountBalance - amount) > overdraftAllowed) ) {
+            throw new Exception("Unable to process loan payment. AccountNo: " + accountNo + " has insufficient funds!");
+        }
+
+        conn.setAutoCommit(false);
+
         // Insert loan_payment for given loanNo
-        // Update the last_accessed field on the account that paid the loan
+        String query = "INSERT INTO loan_payment(loan_no, payment_amount, payment_date) VALUES(?,?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, loanNo);
+        stmt.setDouble(2, amount);
+        stmt.setString(3, this.getFormattedCurrentDate());
+        stmt.execute();
 
+        // Insert "LP" transaction for the given accountNo
+        String query2 = "INSERT INTO transaction(account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?) ";
+        PreparedStatement stmt2 = conn.prepareStatement(query2);
+        stmt2.setString(1, accountNo);
+        stmt2.setString(2, "LP");
+        stmt2.setString(3, this.getFormattedCurrentDate());
+        stmt2.setString(4, this.getFormattedCurrentTime());
+        stmt2.setDouble(5, amount);
+        stmt2.execute();
+
+
+        // Update the last_accessed field on the account that paid the loan
+        String query3 = "UPDATE account SET last_accessed = ? WHERE account_no = ? ";
+        PreparedStatement stmt3 = conn.prepareStatement(query3);
+        stmt3.setString(1, this.getFormattedCurrentDate());
+        stmt3.setString(2, accountNo);
+        stmt3.execute();
+
+        conn.commit();
     }
 
     public void makeCashDeposit(String accountNo, double amount) throws SQLException {
+        double currentBalance = this.getAccountBalance(accountNo);
 
         // TODO process request (do NOT use a try-catch here)
-        // Also need to update the last_modified field on the account
+        String query = "INSERT INTO transaction(account_no, transaction_code, date, time, amount) VALUES(?,?,?,?,?) ";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, accountNo);
+        stmt.setString(2, "CD");
+        stmt.setString(3, this.getFormattedCurrentDate());
+        stmt.setString(4, this.getFormattedCurrentTime());
+        stmt.setDouble(5, amount);
+        stmt.execute();
+//
+//        // Also need to update the last_modified field on the account
+        String query2 = "UPDATE account SET last_accessed = ? WHERE account_no = ? ";
+        PreparedStatement stmt2 = conn.prepareStatement(query2);
+        stmt2.setString(1, this.getFormattedCurrentDate());
+        stmt2.setString(2, accountNo);
+        stmt2.execute();
 
 
     }
