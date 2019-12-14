@@ -401,7 +401,7 @@ CREATE TABLE `transaction` (
   KEY `transaction_account_no_idx` (`account_no`),
   CONSTRAINT `transaction_account_no` FOREIGN KEY (`account_no`) REFERENCES `account` (`account_no`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `transaction_trans_code` FOREIGN KEY (`transaction_code`) REFERENCES `transaction_type` (`transaction_code`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -609,4 +609,4 @@ CREATE TABLE `transaction_type` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-14 18:34:31
+-- Dump completed on 2019-12-14  0:19:31

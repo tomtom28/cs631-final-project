@@ -6,6 +6,8 @@ DROP TRIGGER IF EXISTS `update_account_balance_after_transaction_insert`;
 DROP TRIGGER IF EXISTS `update_account_balance_after_transaction_update`;
 DROP TRIGGER IF EXISTS `update_account_balance_after_transaction_deletion`;
 
+
+
 -- Trigger 1
 -- Updates the balance field of the given account whose
 -- newly inserted transaction has a matching account_no
