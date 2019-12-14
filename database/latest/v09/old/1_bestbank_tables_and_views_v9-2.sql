@@ -31,7 +31,7 @@ CREATE TABLE `account` (
   `branch_name` varchar(45) NOT NULL,
   PRIMARY KEY (`account_no`),
   KEY `account_branch_name_idx` (`branch_name`),
-  CONSTRAINT `account_branch_name` FOREIGN KEY (`branch_name`) REFERENCES `branch` (`name`) ON UPDATE CASCADE
+  CONSTRAINT `account_branch_name` FOREIGN KEY (`branch_name`) REFERENCES `branch` (`name`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=100000005 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -91,7 +91,7 @@ DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch` (
   `name` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
-  `assets` varchar(45) NOT NULL,
+  `Assets` varchar(45) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -148,8 +148,7 @@ DROP TABLE IF EXISTS `charge_account`;
 CREATE TABLE `charge_account` (
   `branch_name` varchar(45) NOT NULL,
   `balance` double NOT NULL,
-  PRIMARY KEY (`branch_name`),
-  CONSTRAINT `charge_account_branch_name` FOREIGN KEY (`branch_name`) REFERENCES `branch` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`branch_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -215,7 +214,7 @@ CREATE TABLE `dependent` (
   `last_name` varchar(45) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `employee_ssn` varchar(11) NOT NULL,
-  PRIMARY KEY (`last_name`,`first_name`,`employee_ssn`),
+  PRIMARY KEY (`last_name`,`first_name`),
   KEY `dependent_employee_ssn_idx` (`employee_ssn`),
   CONSTRAINT `dependent_employee_ssn` FOREIGN KEY (`employee_ssn`) REFERENCES `employee` (`ssn`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -274,7 +273,7 @@ CREATE TABLE `has_loan` (
   PRIMARY KEY (`loan_no`,`ssn`),
   KEY `ssn_idx` (`ssn`),
   CONSTRAINT `has_loan_loan_no` FOREIGN KEY (`loan_no`) REFERENCES `loan` (`loan_no`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `has_loan_ssn` FOREIGN KEY (`ssn`) REFERENCES `customer` (`ssn`) ON UPDATE CASCADE
+  CONSTRAINT `has_loan_ssn` FOREIGN KEY (`ssn`) REFERENCES `customer` (`ssn`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,9 +290,7 @@ CREATE TABLE `loan` (
   `date_taken` date NOT NULL,
   `description` varchar(80) DEFAULT NULL,
   `branch_name` varchar(45) NOT NULL,
-  PRIMARY KEY (`loan_no`),
-  KEY `loan_branch_name_idx` (`branch_name`),
-  CONSTRAINT `loan_branch_name` FOREIGN KEY (`branch_name`) REFERENCES `branch` (`name`) ON UPDATE CASCADE
+  PRIMARY KEY (`loan_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=200000004 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -396,11 +393,7 @@ CREATE TABLE `transaction` (
   `amount` double NOT NULL,
   `date` date NOT NULL,
   `time` varchar(45) NOT NULL,
-  PRIMARY KEY (`record_no`,`account_no`),
-  KEY `transaction_trans_code_idx` (`transaction_code`),
-  KEY `transaction_account_no_idx` (`account_no`),
-  CONSTRAINT `transaction_account_no` FOREIGN KEY (`account_no`) REFERENCES `account` (`account_no`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `transaction_trans_code` FOREIGN KEY (`transaction_code`) REFERENCES `transaction_type` (`transaction_code`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`record_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -609,4 +602,4 @@ CREATE TABLE `transaction_type` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-14  0:19:31
+-- Dump completed on 2019-12-11 23:30:01
