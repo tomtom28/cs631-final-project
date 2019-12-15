@@ -127,11 +127,17 @@ public class CustomerController {
         this.appendAllBranches(model, customerDAO); // for branches drop down
 
         String actionType = "[Remove Account]";
+
         try {
+            // Check if Account exists
+            if (!customerDAO.isValidAccountNo(accountNo)) {
+                throw new Exception("Account No. " + accountNo + " does not exist.");
+            }
+            // Remove Account
             String removedAccountNo = customerDAO.removeCustomerAccount(accountNo);
             model.addAttribute("success","Action " + actionType + " Completed: " +
                     "Account No: " + removedAccountNo + " has successfully been removed.");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
         }finally {
@@ -182,10 +188,14 @@ public class CustomerController {
 
         String actionType = "[Remove Loan]";
         try {
+            // Check if Loan exists
+            if (!customerDAO.isValidLoanNo(loanNo)) {
+                throw new Exception("Loan No. " + loanNo + " does not exist.");
+            }
             String removedLoanNo = customerDAO.removeCustomerLoan(loanNo);
             model.addAttribute("success","Action " + actionType + " Completed: " +
                     "Loan No: " + removedLoanNo + " has successfully been removed.");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             model.addAttribute("error","Action " + actionType + " Failed: " +
                     e.getMessage()); // message from DB
         }finally {

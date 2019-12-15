@@ -31,6 +31,32 @@ public class CustomerDAO {
         }
     }
 
+
+    public boolean isValidAccountNo(String accountNo) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM account WHERE account_no = ?");
+            stmt.setString(1, accountNo);
+            ResultSet rSet = stmt.executeQuery();
+            return rSet.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean isValidLoanNo(String loanNo) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM loan WHERE loan_no = ?");
+            stmt.setString(1, loanNo);
+            ResultSet rSet = stmt.executeQuery();
+            return rSet.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+
     public void deleteCustomerBySSN(String ssn) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM customer WHERE ssn = ?");
         stmt.setString(1, ssn);
