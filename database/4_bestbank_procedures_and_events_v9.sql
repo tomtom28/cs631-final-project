@@ -25,8 +25,12 @@ SET GLOBAL event_scheduler = ON;
 DELIMITER ;;
 CREATE PROCEDURE update_employee_years_employed()
 BEGIN
+	-- Turn off Safe Mode
+    SET SQL_SAFE_UPDATES = 0;
 	ALTER TABLE employee
 	CHANGE COLUMN years_employed years_employed INT(3) GENERATED ALWAYS AS ((YEAR(CURDATE()) - year(`start_date`))) VIRTUAL;
+	-- Turn Safe Mode back on
+    SET SQL_SAFE_UPDATES = 1;
 END;;
 DELIMITER ;
 
@@ -54,17 +58,19 @@ BEGIN
     DECLARE service_charge DOUBLE DEFAULT 0.0; -- current service charge amount
     DECLARE todays_date DATE DEFAULT NULL; -- current date
     DECLARE current_account_no INT DEFAULT 0; -- account_no (determined during iterations)
+    DECLARE todays_time VARCHAR(8) DEFAULT NULL; -- current time
     
     SET i = 0;
     SELECT COUNT(*) FROM `account` INTO n;
     SELECT charge FROM transaction_type WHERE transaction_code = 'SC' INTO service_charge;
 	SELECT CURDATE() INTO todays_date;
+    SELECT TIME_FORMAT(NOW(), '%l:%i %p') INTO todays_time;
     
     -- Iterate over all account tuples and insert service charge into transaction table
     WHILE i < n DO
 		SELECT account_no FROM `account` ORDER BY account_no LIMIT i,1 INTO current_account_no;
 		INSERT INTO transaction(account_no, transaction_code, `date`, `time`, `amount`) 
-        VALUES (current_account_no, 'SC', todays_date, '6:00 AM', service_charge);
+        VALUES (current_account_no, 'SC', todays_date, todays_time, service_charge);
         SET i = i + 1;
 	END WHILE;
 END;;
@@ -124,9 +130,13 @@ DO
 DELIMITER ;;
 CREATE PROCEDURE update_branch_total_assets()
 BEGIN
+	-- Turn off Safe Mode
+    SET SQL_SAFE_UPDATES = 0;
 	UPDATE branch, branch_asset_total
 	SET branch.assets = branch_asset_total.total_assets
 	WHERE branch.`name` = branch_asset_total.`branch_name`;
+	-- Turn Safe Mode back on
+    SET SQL_SAFE_UPDATES = 1;
 END;;
 DELIMITER ;
 
