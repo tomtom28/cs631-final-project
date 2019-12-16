@@ -17,7 +17,7 @@ Use any Java IDE, we suggest using IntelliJ:
 
   - Then, open [MySQL workbench](https://www.mysql.com/products/workbench/) and run the queries included in the `database` folder.
   
-  - Please note that the ApplicationDAO class will need to have its username & password updated to match your environment.
+  - Please note that the `ApplicationDAO` class will need to have its username & password updated to match your environment.
 
   - After that, click the green play button in IntelliJ to run the project.
 
