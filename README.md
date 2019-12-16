@@ -6,6 +6,13 @@ For more details please refer to the project's [documentation](https://docs.goog
 
 
 
+### Authors
+[Spencer Escalante](https://github.com/spencer517)
+
+[Thomas Thompson](https://github.com/tomtom28)
+
+
+
 ### Cloning Down the Repo
 Use any Java IDE, we suggest using IntelliJ:
 
