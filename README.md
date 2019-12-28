@@ -4,6 +4,7 @@ This application mimics the CRUD (Create, Read, Update, and Delete) actions asso
 
 For more details please refer to the project's [documentation](https://docs.google.com/document/d/1u4qJDYjY3VJPEMfIhZeqkGK1dCBrHWjwb-2bhQ5nMb8/edit?usp=sharing).
 
+To test out the project in Heroku, please navigate [here](http://best-bank-system.herokuapp.com/).
 
 
 ### Authors
