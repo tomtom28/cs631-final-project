@@ -32,6 +32,15 @@ Use any Java IDE, we suggest using IntelliJ:
 
 
 
+### Screenshots
+
+## Home Page
+![BestBank Home Page](/screenshots/Home-Page.png)
+
+## Customer Service Page
+![BestBank Customer Service Page](/screenshots/CS-Page.png)
+
+
 ### References
 
 https://spring.io/guides/gs/serving-web-content/
