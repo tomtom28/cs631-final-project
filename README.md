@@ -34,10 +34,10 @@ Use any Java IDE, we suggest using IntelliJ:
 
 ### Screenshots
 
-## Home Page
+#### Home Page
 ![BestBank Home Page](/screenshots/Home-Page.png)
 
-## Customer Service Page
+#### Customer Service Page
 ![BestBank Customer Service Page](/screenshots/CS-Page.png)
 
 
