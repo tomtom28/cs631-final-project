@@ -19,7 +19,7 @@ public class ApplicationDAO {
             // Determine if connected to localhost or heroku
             String JAWSDB_MARIA_URL = System.getenv("JAWSDB_MARIA_URL");
             if (JAWSDB_MARIA_URL != null) { // deployed
-                return DriverManager.getConnection(JAWSDB_MARIA_URL);
+                return DriverManager.getConnection("jdbc:" + JAWSDB_MARIA_URL);
             }
             else { // localhost
                 return DriverManager.getConnection(dataBaseURL, userName, password);
